@@ -418,3 +418,25 @@ export function Quote({
     </RFDS.SemanticCard>
   );
 }
+
+// Items Grid Component
+export interface Item {
+  title: string;
+  description: string;
+}
+
+export function ItemsGrid({ items }: { items: Item[] }) {
+  return (
+    <div className="grid gap-3">
+      {items.map((item, i) => (
+        <div
+          key={i}
+          className="grid grid-cols-[160px_1fr] gap-4 text-sm border-l-2 border-border/50 pl-4 py-1.5 hover:border-primary/40 transition-colors"
+        >
+          <div className="font-medium text-foreground">{item.title}</div>
+          <div className="text-muted-foreground">{item.description}</div>
+        </div>
+      ))}
+    </div>
+  );
+}

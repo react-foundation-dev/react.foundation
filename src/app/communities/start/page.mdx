@@ -9,7 +9,8 @@ import {
   Callout,
   ResourceGrid,
   ResourceLink,
-  Quote
+  Quote,
+  ItemsGrid
 } from '@/components/communities/guide-components';
 import { ScrollToButton, OpenLinkButton } from '@/components/communities/guide-client-components';
 import { RFDS } from '@/components/rfds';
@@ -164,31 +165,49 @@ export const metadata = {
   title="Build Your Core Team"
   description="You don't have to do this alone. Strong communities have teams with clear roles and shared responsibility."
 >
-  <Callout variant="success" title="Key Team Roles">
-    <ul className="space-y-2 mt-2">
-      <li><strong>Lead Organizer:</strong> Overall vision and coordination</li>
-      <li><strong>Speaker Coordinator:</strong> Recruit and support speakers</li>
-      <li><strong>Venue Coordinator:</strong> Secure and manage locations</li>
-      <li><strong>Marketing Lead:</strong> Social media, announcements, outreach</li>
-      <li><strong>Sponsorship Manager:</strong> Build relationships with sponsors</li>
-      <li><strong>Code of Conduct Enforcer:</strong> Ensure safe, inclusive environment</li>
-    </ul>
-  </Callout>
+
+<div className="py-4">
+  <h5 className="font-semibold text-foreground mb-3">Team Roles</h5>
+  <ItemsGrid
+    items={[
+      {
+        title: 'Lead Organizer',
+        description: 'Overall vision and coordinator'
+      },
+      {
+        title: 'Speaker Coordinator',
+        description: 'Recruit and support speakers'
+      },
+      {
+        title: 'Venue Coordinator',
+        description: 'Secure and manage locations'
+      },
+      {
+        title: 'Marketing Lead',
+        description: 'Social media, announcements, outreach'
+      },
+      {
+        title: 'Sponsorship Lead',
+        description: 'Ensure safe, inclusive environment'
+      }
+    ]}
+  />
+</div>
 
   <div className="mt-4">
-    <h5 className="font-semibold text-foreground mb-3">Where to Find Co-Organizers:</h5>
+    <h5 className="font-semibold text-foreground mb-3">Where to Find Co-Organizers</h5>
     <div className="grid gap-3 sm:grid-cols-2">
-      <RFDS.SemanticCard variant="outlined" className="p-3">
-        <p className="text-sm text-muted-foreground">Local developer meetups</p>
+      <RFDS.SemanticCard className="p-3">
+        <p className="text-sm text-muted-foreground">→ Local developer meetups</p>
       </RFDS.SemanticCard>
-      <RFDS.SemanticCard variant="outlined" className="p-3">
-        <p className="text-sm text-muted-foreground">Company internal communities</p>
+      <RFDS.SemanticCard className="p-3">
+        <p className="text-sm text-muted-foreground">→ Company internal communities</p>
       </RFDS.SemanticCard>
-      <RFDS.SemanticCard variant="outlined" className="p-3">
-        <p className="text-sm text-muted-foreground">Bootcamp alumni networks</p>
+      <RFDS.SemanticCard className="p-3">
+        <p className="text-sm text-muted-foreground">→ Bootcamp alumni networks</p>
       </RFDS.SemanticCard>
-      <RFDS.SemanticCard variant="outlined" className="p-3">
-        <p className="text-sm text-muted-foreground">Existing enthusiastic attendees</p>
+      <RFDS.SemanticCard className="p-3">
+        <p className="text-sm text-muted-foreground">→ Existing enthusiastic attendees</p>
       </RFDS.SemanticCard>
     </div>
   </div>
