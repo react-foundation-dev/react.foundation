@@ -1,10 +1,23 @@
-import { GuideHero, SectionHeader, FeatureGrid, FeatureCard, StepCard, FormatComparison, Checklist, Callout, ResourceGrid, ResourceLink, Quote } from '@/components/communities/guide-components';
+import {
+  GuideHero,
+  SectionHeader,
+  FeatureGrid,
+  FeatureCard,
+  StepCard,
+  FormatComparison,
+  Checklist,
+  Callout,
+  ResourceGrid,
+  ResourceLink,
+  Quote
+} from '@/components/communities/guide-components';
 import { ScrollToButton, OpenLinkButton } from '@/components/communities/guide-client-components';
 import { RFDS } from '@/components/rfds';
 
 export const metadata = {
   title: 'Start Your Own React Community | React Foundation',
-  description: 'A comprehensive guide to starting and growing a successful React community in your area.',
+  description:
+    'A comprehensive guide to starting and growing a successful React community in your area.'
 };
 
 <GuideHero
@@ -12,12 +25,8 @@ export const metadata = {
   description="Building a thriving React community takes passion, dedication, and the right approach. This guide will help you navigate every step of the journey—from planning your first meetup to sustaining long-term growth."
 >
   <div className="flex flex-wrap gap-4 justify-center">
-    <ScrollToButton targetId="getting-started">
-      Get Started →
-    </ScrollToButton>
-    <OpenLinkButton url="/communities/add">
-      Submit Your Community
-    </OpenLinkButton>
+    <ScrollToButton targetId="getting-started">Get Started →</ScrollToButton>
+    <OpenLinkButton url="/communities/add">Submit Your Community</OpenLinkButton>
   </div>
 </GuideHero>
 
@@ -60,7 +69,6 @@ export const metadata = {
   />
 </FeatureGrid>
 
-
 <div id="getting-started" />
 
 <SectionHeader
@@ -100,6 +108,7 @@ export const metadata = {
         </RFDS.SemanticCard>
       </div>
     </div>
+
   </div>
 </StepCard>
 
@@ -135,14 +144,14 @@ export const metadata = {
         frequency: 'Annually',
         duration: '1-3 days',
         size: '100-1000+',
-        format: 'Multiple tracks'
+        format: 'One or multiple tracks'
       },
       {
         name: 'Workshops',
         icon: '💻',
         best: 'Hands-on skill building',
         frequency: 'Monthly',
-        duration: '3-8 hours',
+        duration: '2-8 hours',
         size: '15-30',
         format: 'Instructor-led coding'
       }
@@ -188,10 +197,10 @@ export const metadata = {
 </div>
 
 <div className="mt-16">
-<SectionHeader
-  title="Planning Your First Event"
-  description="From venue selection to speaker support, here's everything you need to launch successfully."
-/>
+  <SectionHeader
+    title="Planning Your First Event"
+    description="From venue selection to speaker support, here's everything you need to launch successfully."
+  />
 </div>
 
 <div className="space-y-6">
@@ -344,31 +353,14 @@ export const metadata = {
       description="6:30-6:40 PM"
       icon="👋"
     />
-    <RFDS.TimelineStep
-      title="First talk"
-      description="6:40-7:10 PM"
-      icon="🎤"
-    />
-    <RFDS.TimelineStep
-      title="Break, networking"
-      description="7:10-7:20 PM"
-      icon="☕"
-    />
-    <RFDS.TimelineStep
-      title="Second talk or extended Q&A"
-      description="7:20-7:50 PM"
-      icon="💬"
-    />
-    <RFDS.TimelineStep
-      title="Open networking, demos"
-      description="7:50-8:30 PM"
-      icon="🤝"
-    />
+    <RFDS.TimelineStep title="First talk" description="6:40-7:10 PM" icon="🎤" />
+    <RFDS.TimelineStep title="Break, networking" description="7:10-7:20 PM" icon="☕" />
+    <RFDS.TimelineStep title="Second talk or extended Q&A" description="7:20-7:50 PM" icon="💬" />
+    <RFDS.TimelineStep title="Open networking, demos" description="7:50-8:30 PM" icon="🤝" />
   </RFDS.Timeline>
 </div>
 
 </div>
-
 
 <SectionHeader
   title="Building Your Community"
@@ -403,11 +395,21 @@ export const metadata = {
 <Callout variant="tip" title="Content Calendar">
   Create a consistent posting schedule:
   <ul className="space-y-1 mt-2">
-    <li><strong>4-6 weeks ahead:</strong> Event announcement</li>
-    <li><strong>2-3 weeks ahead:</strong> Speaker spotlights</li>
-    <li><strong>1 week ahead:</strong> Final reminders</li>
-    <li><strong>Next day:</strong> Recap posts with photos</li>
-    <li><strong>Weekly:</strong> Share recordings (if speakers consent)</li>
+    <li>
+      <strong>4-6 weeks ahead:</strong> Event announcement
+    </li>
+    <li>
+      <strong>2-3 weeks ahead:</strong> Speaker spotlights
+    </li>
+    <li>
+      <strong>1 week ahead:</strong> Final reminders
+    </li>
+    <li>
+      <strong>Next day:</strong> Recap posts with photos
+    </li>
+    <li>
+      <strong>Weekly:</strong> Share recordings (if speakers consent)
+    </li>
   </ul>
 </Callout>
 
@@ -420,7 +422,10 @@ export const metadata = {
       <span className="text-2xl">📋</span>
       <div>
         <h5 className="font-semibold text-foreground">Adopt & Enforce</h5>
-        <p className="text-sm text-muted-foreground mt-1">Use established templates like Contributor Covenant, make it visible, and enforce consistently</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Use established templates like Contributor Covenant, make it visible, and enforce
+          consistently
+        </p>
       </div>
     </div>
     <RFDS.SemanticSeparator />
@@ -428,7 +433,9 @@ export const metadata = {
       <span className="text-2xl">♿</span>
       <div>
         <h5 className="font-semibold text-foreground">Accessibility First</h5>
-        <p className="text-sm text-muted-foreground mt-1">Wheelchair accessible venues, captions for talks, quiet spaces, dietary accommodations</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Wheelchair accessible venues, captions for talks, quiet spaces, dietary accommodations
+        </p>
       </div>
     </div>
     <RFDS.SemanticSeparator />
@@ -436,7 +443,10 @@ export const metadata = {
       <span className="text-2xl">🌈</span>
       <div>
         <h5 className="font-semibold text-foreground">Diverse & Welcoming</h5>
-        <p className="text-sm text-muted-foreground mt-1">Inclusive language, diverse speakers, scholarships for paid events, welcome all skill levels</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Inclusive language, diverse speakers, scholarships for paid events, welcome all skill
+          levels
+        </p>
       </div>
     </div>
   </div>
@@ -455,16 +465,16 @@ export const metadata = {
     </ul>
   </RFDS.SemanticCard>
 
-  <RFDS.SemanticCard variant="outlined" hover className="p-6 border-primary/50">
-    <RFDS.SemanticBadge className="mb-4">Pizza Tier</RFDS.SemanticBadge>
-    <div className="text-3xl font-bold text-foreground mb-2">$500</div>
-    <ul className="space-y-2 text-sm text-muted-foreground">
-      <li>All Community benefits</li>
-      <li>Logo on event page</li>
-      <li>2-min speaking slot</li>
-      <li>Food sponsorship credit</li>
-    </ul>
-  </RFDS.SemanticCard>
+<RFDS.SemanticCard variant="outlined" hover className="p-6 border-primary/50">
+  <RFDS.SemanticBadge className="mb-4">Pizza Tier</RFDS.SemanticBadge>
+  <div className="text-3xl font-bold text-foreground mb-2">$500</div>
+  <ul className="space-y-2 text-sm text-muted-foreground">
+    <li>All Community benefits</li>
+    <li>Logo on event page</li>
+    <li>2-min speaking slot</li>
+    <li>Food sponsorship credit</li>
+  </ul>
+</RFDS.SemanticCard>
 
   <RFDS.SemanticCard variant="outlined" hover className="p-6">
     <RFDS.SemanticBadge variant="secondary" className="mb-4">Premier Tier</RFDS.SemanticBadge>
@@ -481,13 +491,20 @@ export const metadata = {
 <Callout variant="info" title="What Sponsors Want">
   Understanding sponsor motivations helps create win-win partnerships:
   <ul className="space-y-1 mt-2">
-    <li><strong>Talent Access:</strong> Recruiting and hiring opportunities</li>
-    <li><strong>Brand Visibility:</strong> Recognition in the tech community</li>
-    <li><strong>Product Awareness:</strong> Introduce tools and services</li>
-    <li><strong>Community Goodwill:</strong> Support and give back</li>
+    <li>
+      <strong>Talent Access:</strong> Recruiting and hiring opportunities
+    </li>
+    <li>
+      <strong>Brand Visibility:</strong> Recognition in the tech community
+    </li>
+    <li>
+      <strong>Product Awareness:</strong> Introduce tools and services
+    </li>
+    <li>
+      <strong>Community Goodwill:</strong> Support and give back
+    </li>
   </ul>
 </Callout>
-
 
 <SectionHeader
   title="Sustaining Long-Term Growth"
@@ -497,7 +514,8 @@ export const metadata = {
 ### Preventing Organizer Burnout
 
 <Quote author="Anonymous Organizer" role="5-year community leader">
-  The secret to longevity isn't working harder—it's building a team you trust and remembering why you started.
+  The secret to longevity isn't working harder—it's building a team you trust and remembering why
+  you started.
 </Quote>
 
 <div className="grid gap-6 md:grid-cols-2">
@@ -525,7 +543,8 @@ export const metadata = {
 ### Measuring Success
 
 <Callout variant="success" title="Quality Over Quantity">
-  A small, engaged community beats a large inactive one every time. Focus on value delivered, not just headcount.
+  A small, engaged community beats a large inactive one every time. Focus on value delivered, not
+  just headcount.
 </Callout>
 
 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -555,66 +574,64 @@ export const metadata = {
   </RFDS.SemanticCard>
 </div>
 
-
 <SectionHeader
   title="Your First 90 Days"
   description="A month-by-month roadmap to launch your community successfully."
 />
 
 <div className="not-prose">
-<RFDS.Timeline>
-  <RFDS.TimelineItem
-    date="Month 1"
-    title="Foundation"
-    subtitle="Laying the groundwork"
-    description="Establish your community's core identity and begin building your team."
-    variant="default"
-    icon="🎯"
-    items={[
-      'Define your community vision and format',
-      'Recruit 1-2 co-organizers',
-      'Research venues (visit 3-5 options)',
-      'Set up social media accounts',
-      'Create Meetup.com or Lu.ma page',
-      'Draft Code of Conduct'
-    ]}
-  />
-  <RFDS.TimelineItem
-    date="Month 2"
-    title="Planning"
-    subtitle="Building momentum"
-    description="Secure your logistics and start building excitement for your launch."
-    variant="default"
-    icon="📋"
-    items={[
-      'Secure venue for first 3 events',
-      'Book first 2-3 speakers',
-      'Set up event registration',
-      'Start building email list',
-      'Create event graphics and branding',
-      'Reach out to potential sponsors'
-    ]}
-  />
-  <RFDS.TimelineItem
-    date="Month 3"
-    title="Launch"
-    subtitle="Going live"
-    description="Execute your first event and celebrate your community's beginning!"
-    variant="default"
-    icon="🚀"
-    items={[
-      'Heavy promotion 3-4 weeks before event',
-      'Confirm all logistics (A/V, food, etc.)',
-      'Send reminder emails to registrants',
-      'Host your first event!',
-      'Collect feedback and photos',
-      'Send thank-you notes to speakers and sponsors',
-      'Publish recap and announce next event'
-    ]}
-  />
-</RFDS.Timeline>
+  <RFDS.Timeline>
+    <RFDS.TimelineItem
+      date="Month 1"
+      title="Foundation"
+      subtitle="Laying the groundwork"
+      description="Establish your community's core identity and begin building your team."
+      variant="default"
+      icon="🎯"
+      items={[
+        'Define your community vision and format',
+        'Recruit 1-2 co-organizers',
+        'Research venues (visit 3-5 options)',
+        'Set up social media accounts',
+        'Create Meetup.com or Lu.ma page',
+        'Draft Code of Conduct'
+      ]}
+    />
+    <RFDS.TimelineItem
+      date="Month 2"
+      title="Planning"
+      subtitle="Building momentum"
+      description="Secure your logistics and start building excitement for your launch."
+      variant="default"
+      icon="📋"
+      items={[
+        'Secure venue for first 3 events',
+        'Book first 2-3 speakers',
+        'Set up event registration',
+        'Start building email list',
+        'Create event graphics and branding',
+        'Reach out to potential sponsors'
+      ]}
+    />
+    <RFDS.TimelineItem
+      date="Month 3"
+      title="Launch"
+      subtitle="Going live"
+      description="Execute your first event and celebrate your community's beginning!"
+      variant="default"
+      icon="🚀"
+      items={[
+        'Heavy promotion 3-4 weeks before event',
+        'Confirm all logistics (A/V, food, etc.)',
+        'Send reminder emails to registrants',
+        'Host your first event!',
+        'Collect feedback and photos',
+        'Send thank-you notes to speakers and sponsors',
+        'Publish recap and announce next event'
+      ]}
+    />
+  </RFDS.Timeline>
 </div>
-
 
 <SectionHeader
   title="Essential Resources"
@@ -688,7 +705,6 @@ export const metadata = {
 
 </div>
 
-
 <SectionHeader
   title="Common Challenges & Solutions"
   description="Learn from the experiences of thousands of community organizers."
@@ -703,7 +719,9 @@ export const metadata = {
       <h4 className="text-lg font-semibold text-foreground mb-2">Challenge: Low Attendance</h4>
       <RFDS.SemanticSeparator className="my-4" />
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground"><strong className="text-foreground">Solutions:</strong></p>
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">Solutions:</strong>
+        </p>
         <ul className="space-y-1 text-sm text-muted-foreground ml-4">
           <li>Survey past attendees about preferred topics and times</li>
           <li>Partner with other local tech groups for co-hosted events</li>
@@ -724,7 +742,9 @@ export const metadata = {
       <h4 className="text-lg font-semibold text-foreground mb-2">Challenge: Finding Speakers</h4>
       <RFDS.SemanticSeparator className="my-4" />
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground"><strong className="text-foreground">Solutions:</strong></p>
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">Solutions:</strong>
+        </p>
         <ul className="space-y-1 text-sm text-muted-foreground ml-4">
           <li>Encourage lightning talks (less intimidating for first-timers)</li>
           <li>Provide speaker mentorship—help people prepare</li>
@@ -745,7 +765,9 @@ export const metadata = {
       <h4 className="text-lg font-semibold text-foreground mb-2">Challenge: Venue Costs</h4>
       <RFDS.SemanticSeparator className="my-4" />
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground"><strong className="text-foreground">Solutions:</strong></p>
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">Solutions:</strong>
+        </p>
         <ul className="space-y-1 text-sm text-muted-foreground ml-4">
           <li>Approach tech companies for free office space</li>
           <li>Use public libraries or university rooms</li>
@@ -766,7 +788,9 @@ export const metadata = {
       <h4 className="text-lg font-semibold text-foreground mb-2">Challenge: Organizer Burnout</h4>
       <RFDS.SemanticSeparator className="my-4" />
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground"><strong className="text-foreground">Solutions:</strong></p>
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">Solutions:</strong>
+        </p>
         <ul className="space-y-1 text-sm text-muted-foreground ml-4">
           <li>Build a co-organizer team immediately</li>
           <li>Rotate leadership responsibilities</li>
@@ -781,7 +805,6 @@ export const metadata = {
 </RFDS.SemanticCard>
 
 </div>
-
 
 <SectionHeader
   title="Connect with React Foundation"
@@ -826,19 +849,17 @@ export const metadata = {
   <RFDS.SemanticCard variant="glass" className="inline-block p-8 max-w-2xl">
     <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Get Started?</h3>
     <div className="text-muted-foreground mb-6 leading-relaxed">
-      Submit your community to get listed on our global community map and access organizer resources.
+      Submit your community to get listed on our global community map and access organizer
+      resources.
     </div>
     <div className="flex flex-wrap gap-4 justify-center">
       <OpenLinkButton url="/communities/add" variant="primary">
         Submit Your Community
       </OpenLinkButton>
-      <OpenLinkButton url="mailto:community@react.foundation">
-        Contact Us
-      </OpenLinkButton>
+      <OpenLinkButton url="mailto:community@react.foundation">Contact Us</OpenLinkButton>
     </div>
   </RFDS.SemanticCard>
 </div>
-
 
 <div className="not-prose text-center py-12">
   <div className="text-2xl font-semibold text-foreground mb-4">
