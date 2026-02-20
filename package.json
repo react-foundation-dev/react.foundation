@@ -66,7 +66,7 @@
     "lucide-react": "^0.548.0",
     "next": "16.0.10",
     "next-auth": "^4.24.11",
-    "next-mdx-remote": "^5.0.0",
+    "next-mdx-remote": "^6.0.0",
     "openai": "^6.7.0",
     "postprocessing": "^6.37.8",
     "puppeteer": "^24.26.1",
