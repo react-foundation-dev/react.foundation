@@ -7,6 +7,7 @@
 
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { ReactLogo3D } from '@/components/ui/react-logo-3d';
 import { Starfield } from '@/components/ui/starfield';
@@ -249,7 +250,13 @@ export default function ComingSoonPage() {
       {/* Fixed Footer */}
       <div className="fixed bottom-6 left-0 right-0 z-20 text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-primary/50">
-          React Foundation · 2025
+          Copyright © The Linux Foundation®. All rights reserved. The Linux Foundation has
+          registered trademarks and uses trademarks. For more information, including terms
+          of use, privacy policy, and trademark usage, please see our {" "}
+          <Link className="underline hover:text-foreground" href="https://www.linuxfoundation.org/legal/policies?__hstc=262006610.e1a66f67cd0c0baa5c7b042e4f9911ce.1768952497248.1771462813100.1771610134177.3&__hssc=262006610.1.1771610134177&__hsfp=360811d5cbd407fc58d506f8b0aa3133">
+            Policies page
+          </Link>
+          .
         </p>
       </div>
 
