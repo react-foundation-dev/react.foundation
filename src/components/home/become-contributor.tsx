@@ -1,11 +1,21 @@
 'use client';
 
+import React from "react";
 import { RFDS } from "@/components/rfds";
 import Link from "next/link";
 
-const contributorData = [
+type Action = { href: string; label: string; external?: boolean };
+
+const contributorData: {
+  variant: 'code' | 'donate' | 'sponsor' | 'member';
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  primaryAction: Action;
+  secondaryAction: Action;
+}[] = [
   {
-    variant: 'code' as const,
+    variant: 'code',
     title: 'Contribute to Repos',
     description:
       'Submit code, RFCs, proposals, documentation, or bug reports to React and 54+ ecosystem libraries. Your contributions directly improve the tools millions of developers use.',
@@ -112,12 +122,13 @@ const contributorData = [
       </svg>
     ),
     primaryAction: {
-      href: '/about',
-      label: 'Learn About Membership →',
+      href: 'https://enrollment.lfx.linuxfoundation.org/?project=react-foundation',
+      label: 'Apply Now →',
+      external: true,
     },
     secondaryAction: {
-      href: '#',
-      label: 'Apply Now',
+      href: '/about',
+      label: 'Learn More',
     },
   },
 ];
@@ -157,6 +168,7 @@ export function BecomeContributor() {
                 <Link
                   href={item.primaryAction.href}
                   className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-secondary px-3 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  {...(item.primaryAction.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {item.primaryAction.label}
                 </Link>
