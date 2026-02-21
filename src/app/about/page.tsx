@@ -184,6 +184,7 @@ export default function AboutPage() {
           <div id="supported-ecosystem">
             <EcosystemLibraries
               title="Supported Ecosystem"
+              showMissingLibraryIssue
             />
           </div>
 

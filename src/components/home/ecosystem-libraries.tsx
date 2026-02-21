@@ -1,3 +1,4 @@
+import { ButtonLink } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { ecosystemLibraries } from "@/lib/maintainer-tiers";
 import { LibraryCard } from "@/components/ui/library-card";
@@ -10,6 +11,7 @@ interface EcosystemLibrariesProps {
   description?: string;
   risScores?: LibraryScore[]; // Optional RIS scores
   showRIS?: boolean; // Whether to display RIS scores
+  showMissingLibraryIssue?: boolean; // Show CTA for missing ecosystem libraries
 }
 
 export function EcosystemLibraries({
@@ -18,6 +20,7 @@ export function EcosystemLibraries({
   description,
   risScores,
   showRIS = false,
+  showMissingLibraryIssue = false,
 }: EcosystemLibrariesProps) {
   // Create a map of library names to RIS scores for quick lookup
   const risScoreMap = risScores
@@ -28,6 +31,21 @@ export function EcosystemLibraries({
   const libraryCount = ecosystemLibraries.length;
   const defaultDescription = `We track contributions across all ${libraryCount} critical React ecosystem libraries:`;
   const displayDescription = description || defaultDescription;
+  const issueTitle = encodeURIComponent("Missing library in Supported Ecosystem");
+  const issueBody = encodeURIComponent(
+    `### Library name
+
+Library:
+
+### Repository (if known)
+owner/repo:
+
+### Why should this library be included?
+
+`
+  );
+  const issueUrl =
+    `https://github.com/sethwebster/react-foundation/issues/new?title=${issueTitle}&body=${issueBody}`;
   // Group libraries by category
   const categorizedLibraries = [
     {
@@ -123,6 +141,17 @@ export function EcosystemLibraries({
             verified via GitHub
           </p>
         </div>
+
+        {showMissingLibraryIssue ? (
+          <div className="space-y-3 rounded-2xl border border-border/10 bg-background/50 p-6">
+            <p className="text-sm text-foreground/80">
+              Don&apos;t see a library? You can flag it here.
+            </p>
+            <ButtonLink href={issueUrl} variant="secondary" size="md" target="_blank" rel="noopener noreferrer">
+              See a missing library
+            </ButtonLink>
+          </div>
+        ) : null}
       </section>
     </ScrollReveal>
   );
