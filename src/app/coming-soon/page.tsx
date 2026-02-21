@@ -96,9 +96,13 @@ export default function ComingSoonPage() {
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
               <div className="h-full w-[90%] rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600" />
             </div>
-            <div className="flex items-center justify-between pt-1">
-              <StatusDot label="Backend" status="online" />
-              <StatusDot label="API" status="online" />
+            <div className="flex flex-wrap items-center justify-between gap-y-2 pt-1">
+              <StatusDot label="Seeds Planted" status="online" />
+              <StatusDot label="First Charter Created" status="online" />
+              <StatusDot label="Internal Working Model" status="online" />
+              <StatusDot label="Community Changes" status="online" />
+              <StatusDot label="Fundraising" status="online" />
+              <StatusDot label="Governance" status="online" />
               <StatusDot label="Launch" status="pending" />
             </div>
           </div>
