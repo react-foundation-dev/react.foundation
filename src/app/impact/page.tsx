@@ -174,13 +174,9 @@ export default function ImpactPage() {
                 Support the Ecosystem
               </h2>
               <p className="mx-auto max-w-2xl text-lg text-foreground/70">
-                Every purchase directly supports React ecosystem maintainers. Shop the
-                store to make an impact today.
+                Learn more about how we support the ecosystem and where funds go.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <ButtonLink href="/store" variant="primary" size="lg">
-                  Shop the Store
-                </ButtonLink>
                 <ButtonLink href="/about" variant="secondary" size="lg">
                   Learn More
                 </ButtonLink>
