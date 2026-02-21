@@ -1,93 +1,45 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ButtonLink } from "@/components/ui/button";
 import { Footer } from "@/components/layout/footer";
-import { Hero } from "@/components/home/hero";
-import { FeaturedLook } from "@/components/home/featured-look";
-import { FeaturedCollections } from "@/components/home/featured-collections";
-import { LimitedDrops } from "@/components/home/limited-drops";
-import { PastDropsCollections } from "@/components/home/past-drops-collections";
-import { MaintainerProgressProvider } from "@/features/maintainer-progress/context";
-import { MaintainerProgress } from "@/features/maintainer-progress/maintainer-progress";
-import { ImpactSection } from "@/features/impact/impact-section";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { getProductBySlug, getProductsByCollection } from "@/lib/products-shopify";
-import {
-  getAllCollections,
-  getCurrentDrops,
-  getPastDrops,
-  isShopifyEnabled,
-} from "@/lib/shopify";
 
 export const metadata: Metadata = {
-  title: "Store",
-  description:
-    "Official React Foundation storefront featuring limited drops, past releases, and impact-driven merch.",
+  title: "Store | Coming Soon",
+  description: "Our store is currently coming soon.",
 };
 
-export default async function Home() {
-  // Fetch all collections from Shopify
-  const allCollections = isShopifyEnabled() ? await getAllCollections() : [];
-
-  console.log('[Home] All collections:', allCollections.length);
-  console.log('[Home] Collections with isDrop:', allCollections.filter(c => c.isDrop));
-
-  // Filter collections by type
-  const currentDropCollections = getCurrentDrops(allCollections);
-  const pastDropCollections = getPastDrops(allCollections);
-
-  console.log('[Home] Current drops:', currentDropCollections);
-  console.log('[Home] Past drops:', pastDropCollections);
-
-  // Get the primary current drop collection
-  const primaryDrop = currentDropCollections[0];
-
-  // Fetch products from the primary current drop (or fallback to old system)
-  const [currentDropProducts, heroProduct] = await Promise.all([
-    primaryDrop
-      ? getProductsByCollection(primaryDrop.handle)
-      : getProductsByCollection("current-drop"), // Fallback
-    getProductBySlug("fiber-shell"),
-  ]);
-
-  const heroProductFinal = heroProduct ?? currentDropProducts[0] ?? null;
-  const dropTiles = currentDropProducts
-    .filter((product) => product.slug !== heroProductFinal?.slug)
-    .slice(0, 4);
-
+export default function StorePage() {
   return (
     <div className="min-h-screen bg-background pt-24 text-muted-foreground">
       <div className="absolute inset-x-0 top-[-6rem] -z-10 flex justify-center blur-3xl">
         <div className="h-[24rem] w-[60rem] bg-gradient-to-r from-cyan-500 via-yellow-300 to-orange-500 opacity-30" />
       </div>
 
-      <div className="mx-auto flex max-w-6xl flex-col px-6 pb-24 sm:px-8 lg:px-12">
-        <MaintainerProgressProvider>
-          <main className="flex flex-col gap-20">
-            <section className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_420px]">
-              <Hero heroProduct={heroProductFinal} />
-              <FeaturedLook products={currentDropProducts} />
-            </section>
-
-            <ScrollReveal animation="fade-up">
-              <FeaturedCollections collections={allCollections} />
-            </ScrollReveal>
-
-            <ScrollReveal animation="scale">
-              <LimitedDrops heroProduct={heroProductFinal} dropTiles={dropTiles} />
-            </ScrollReveal>
-
-            <ScrollReveal animation="fade-up">
-              <PastDropsCollections collections={pastDropCollections} />
-            </ScrollReveal>
-
-            <ScrollReveal animation="fade-up">
-              <MaintainerProgress />
-            </ScrollReveal>
-
-            <ScrollReveal animation="scale">
-              <ImpactSection />
-            </ScrollReveal>
-          </main>
-        </MaintainerProgressProvider>
+      <div className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-6 py-24 text-center sm:px-8">
+        <div className="space-y-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">
+            Store
+          </p>
+          <h1 className="text-4xl font-semibold text-foreground sm:text-5xl">
+            Coming Soon
+          </h1>
+          <p className="mx-auto max-w-xl text-lg text-foreground/75">
+            We&apos;re preparing a new store experience.
+            Until then, this page is a placeholder while we finalize product drops,
+            collections, and impact-based perks.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <ButtonLink href="/" variant="secondary" size="lg">
+              Back to Home
+            </ButtonLink>
+            <Link
+              href="/about"
+              className="inline-flex rounded-full border-2 border-border px-6 py-3 text-sm font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+            >
+              Learn About the Foundation
+            </Link>
+          </div>
+        </div>
       </div>
 
       <Footer />
