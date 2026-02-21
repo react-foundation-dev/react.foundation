@@ -9,7 +9,6 @@ import {
   ecosystemLibraries,
   maintainerTiers,
 } from "@/lib/maintainer-tiers";
-import { products } from "@/lib/products";
 import { RFDS } from "@/components/rfds";
 
 import { useMaintainerProgress } from "./context";
@@ -21,7 +20,7 @@ export function MaintainerProgress() {
   const { progress, setProgress } = useMaintainerProgress();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const githubLogin = session?.user?.githubLogin ?? null;
 
   const currentTier: MaintainerTier | null = progress.tier;
@@ -165,7 +164,7 @@ export function MaintainerProgress() {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,1fr)_280px]">
+      <div className="mt-6">
         <div className="space-y-4">
           <div className="rounded-2xl border border-border/10 bg-background/[0.03] p-5">
             <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">Current tier</p>
@@ -307,53 +306,6 @@ export function MaintainerProgress() {
             </Collapsible>
           </div>
         </div>
-
-        <aside className="space-y-4 rounded-2xl border border-border/10 bg-background/[0.03] p-5 text-sm text-foreground/70">
-          <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">Product Unlock Timeline</p>
-
-          {status === "unauthenticated" ? (
-            <p className="text-sm text-foreground/60">
-              Link your GitHub account to start unlocking the Core Maintainer Essentials collection.
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {maintainerTiers.map((tier) => {
-                const tierProducts = products.filter((p) => p.unlockTier === tier.id);
-                const isUnlocked = currentTier && maintainerTiers.findIndex((t) => t.id === currentTier.id) >= maintainerTiers.findIndex((t) => t.id === tier.id);
-
-                if (tierProducts.length === 0) return null;
-
-                return (
-                  <div key={tier.id}>
-                    <div className="mb-3 flex items-center gap-2">
-                      <div className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                        isUnlocked
-                          ? 'bg-success/20 text-emerald-300'
-                          : 'bg-background/10 text-foreground/40'
-                      }`}>
-                        {isUnlocked ? '✓' : '🔒'}
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-foreground/90">{tier.label}</p>
-                        <p className="text-[10px] text-foreground/50">{tier.minScore}+ points</p>
-                      </div>
-                    </div>
-                    <ul className="ml-8 space-y-2 border-l-2 border-border/10 pl-4">
-                      {tierProducts.map((product) => (
-                        <li key={product.slug} className={isUnlocked ? 'opacity-100' : 'opacity-50'}>
-                          <span className={`text-sm font-medium ${isUnlocked ? 'text-emerald-200' : 'text-foreground/60'}`}>
-                            {product.name}
-                          </span>
-                          <span className="block text-xs text-foreground/40">{product.tagline}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </aside>
       </div>
     </section>
   );

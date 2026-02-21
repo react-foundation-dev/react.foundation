@@ -57,7 +57,6 @@ export function MobileMenu({ session }: MobileMenuProps) {
         { href: "/about", label: "About" },
         { href: "/updates", label: "Updates" },
         { href: "/impact", label: "Impact" },
-        { href: "/store", label: "Store" },
       ];
 
   return (

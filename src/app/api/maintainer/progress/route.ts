@@ -5,6 +5,7 @@ import {
   getNextTier,
   ecosystemLibraries,
 } from "@/lib/maintainer-tiers";
+import { getServerAuthSession } from "@/lib/auth";
 import { fetchAggregatedContributions, type RepositoryIdentifier } from "@/lib/providers";
 
 export async function POST(request: Request) {
@@ -15,10 +16,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Username is required." }, { status: 400 });
   }
 
-  const token = process.env.GITHUB_TOKEN;
+  const session = await getServerAuthSession();
+  const userGithubToken = session?.accessToken;
+  const token = userGithubToken || process.env.GITHUB_TOKEN;
+
   if (!token) {
     return NextResponse.json(
-      { error: "Server missing GitHub token configuration." },
+      { error: "GitHub authentication is required. Sign in with GitHub or configure GITHUB_TOKEN." },
       { status: 500 },
     );
   }

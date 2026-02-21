@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -8,13 +9,19 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="mx-auto max-w-4xl px-6 py-12 sm:px-8 lg:px-12">
-      <h1 className="text-4xl font-bold text-foreground">Terms of Service</h1>
-      <p className="mt-2 text-base text-foreground/70">
-        Last updated: October 21, 2025
-      </p>
+    <div className="min-h-screen bg-background pt-24 text-muted-foreground">
+      <div className="absolute inset-x-0 top-[-6rem] -z-10 flex justify-center blur-3xl">
+        <div className="h-[24rem] w-[60rem] bg-gradient-to-r from-success/40 via-primary/60 to-primary/70 opacity-30" />
+      </div>
 
-      <div className="prose prose-invert mt-8 max-w-none">
+      <div className="mx-auto max-w-4xl px-6 pb-24 sm:px-8 lg:px-12">
+        <div className="rounded-3xl border border-border/10 bg-muted/60 p-8 sm:p-12">
+          <h1 className="text-4xl font-bold text-foreground">Terms of Service</h1>
+          <p className="mt-2 text-base text-foreground/70">
+            Last updated: October 21, 2025
+          </p>
+
+          <div className="prose prose-invert mt-8 max-w-none">
         <section className="mb-8">
           <h2 className="text-2xl font-semibold text-foreground">1. Acceptance of Terms</h2>
           <p className="mt-4 text-foreground/80">
@@ -97,7 +104,11 @@ export default function TermsPage() {
             If you have any questions about these Terms of Service, please contact us through our GitHub repository or official communication channels.
           </p>
         </section>
+          </div>
+        </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
