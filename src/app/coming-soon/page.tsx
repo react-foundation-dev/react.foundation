@@ -87,6 +87,22 @@ export default function ComingSoonPage() {
             </p>
           </div>
 
+          {/* Progress */}
+          <div className="w-full space-y-3">
+            <div className="flex items-center justify-between text-xs text-foreground/50">
+              <span>Launch progress</span>
+              <span>90%</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div className="h-full w-[90%] rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600" />
+            </div>
+            <div className="flex items-center justify-between pt-1">
+              <StatusDot label="Backend" status="online" />
+              <StatusDot label="API" status="online" />
+              <StatusDot label="Launch" status="pending" />
+            </div>
+          </div>
+
           {/* Auth/Request Section */}
           <div className="w-full space-y-4">
             {!isAuthenticated && (
@@ -184,12 +200,6 @@ export default function ComingSoonPage() {
             )}
           </div>
 
-          {/* Status Indicators */}
-          <div className="flex items-center justify-center gap-6 pt-2">
-            <StatusDot label="Backend" status="online" />
-            <StatusDot label="API" status="online" />
-            <StatusDot label="Launch" status="pending" />
-          </div>
         </div>
       </div>
 
