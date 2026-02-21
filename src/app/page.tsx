@@ -3,10 +3,8 @@ import { Footer } from "@/components/layout/footer";
 import { FoundationHero } from "@/components/home/foundation-hero";
 import { MissionStatement } from "@/components/home/mission-statement";
 import { ThreePillars } from "@/components/home/three-pillars";
-import { ByTheNumbers } from "@/components/home/by-the-numbers";
 import { BecomeContributor } from "@/components/home/become-contributor";
 import { JoinMovementCTA } from "@/components/home/join-movement-cta";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata: Metadata = {
   title: "React Foundation",
@@ -26,7 +24,6 @@ export default function FoundationHome() {
           <FoundationHero />
           <MissionStatement />
           <ThreePillars />
-          <ByTheNumbers />
           <BecomeContributor />
           <JoinMovementCTA />
         </main>
