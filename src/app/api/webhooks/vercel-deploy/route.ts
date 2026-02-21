@@ -18,22 +18,22 @@ export const runtime = 'edge'; // Use edge runtime for fast webhook responses
 
 interface VercelDeploymentPayload {
   id: string;
-  deployment: {
-    id: string;
-    url: string;
-    name: string;
-    meta?: {
-      githubCommitRef?: string;
-      githubCommitSha?: string;
-      githubCommitMessage?: string;
-    };
-  };
   type: 'deployment.succeeded' | 'deployment.error' | 'deployment.created';
   createdAt: number;
-  region: string;
+  region?: string;
   payload: {
-    deploymentUrl: string;
-    projectId: string;
+    deployment: {
+      id: string;
+      url: string;
+      name: string;
+      meta?: {
+        githubCommitRef?: string;
+        githubCommitSha?: string;
+        githubCommitMessage?: string;
+      };
+    };
+    deploymentUrl?: string;
+    projectId?: string;
     teamId?: string;
   };
 }
@@ -134,8 +134,8 @@ export async function POST(request: NextRequest) {
 
     logger.info('Vercel deployment webhook received:', {
       type: payload.type,
-      deploymentUrl: payload.deployment.url,
-      commitRef: payload.deployment.meta?.githubCommitRef,
+      deploymentUrl: payload.payload.deployment.url,
+      commitRef: payload.payload.deployment.meta?.githubCommitRef,
     });
 
     // Only trigger ingestion on successful production deployments
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
 
     // Check if this is a production deployment
     const isProduction =
-      payload.deployment.url === process.env.NEXT_PUBLIC_SITE_URL?.replace(
+      payload.payload.deployment.url === process.env.NEXT_PUBLIC_SITE_URL?.replace(
         /^https?:\/\//,
         ''
       );
@@ -201,8 +201,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Ingestion triggered',
       deployment: {
-        url: payload.deployment.url,
-        commit: payload.deployment.meta?.githubCommitSha,
+        url: payload.payload.deployment.url,
+        commit: payload.payload.deployment.meta?.githubCommitSha,
       },
     });
   } catch (error) {
