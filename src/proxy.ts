@@ -52,7 +52,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check for bypass token in URL param — set cookie and redirect without param
-  const bypassToken = process.env.BYPASS_AUTH_TOKEN;
+  const bypassToken = process.env.BYPASS_AUTH_TOKEN?.trim();
   const overrideParam = request.nextUrl.searchParams.get('coming_soon_override');
   if (bypassToken && overrideParam) {
     if (overrideParam === bypassToken) {
