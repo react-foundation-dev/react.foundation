@@ -46,8 +46,37 @@ const PUBLIC_ROUTES = [
 //   '/api/maintainer',
 // ];
 
+const BYPASS_COOKIE = '_rf_bypass';
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Check for bypass token in URL param — set cookie and redirect without param
+  const bypassToken = process.env.BYPASS_AUTH_TOKEN;
+  const overrideParam = request.nextUrl.searchParams.get('coming_soon_override');
+  if (bypassToken && overrideParam) {
+    if (overrideParam === bypassToken) {
+      const url = request.nextUrl.clone();
+      url.searchParams.delete('coming_soon_override');
+      const response = NextResponse.redirect(url);
+      response.cookies.set(BYPASS_COOKIE, bypassToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+      return response;
+    }
+  }
+
+  // Bypass cookie already set — skip all checks
+  if (bypassToken) {
+    const bypassCookie = request.cookies.get(BYPASS_COOKIE);
+    if (bypassCookie?.value === bypassToken) {
+      return NextResponse.next();
+    }
+  }
 
   // Check for crawler bypass token (for internal content ingestion)
   const crawlerBypassToken = request.headers.get('X-Crawler-Bypass');

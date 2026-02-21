@@ -4,12 +4,25 @@
  */
 
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserManagementService } from '@/lib/admin/user-management-service';
 
+const BYPASS_COOKIE = '_rf_bypass';
+
 export async function GET() {
   try {
+    // Bypass token check — grants access without login
+    const bypassToken = process.env.BYPASS_AUTH_TOKEN;
+    if (bypassToken) {
+      const cookieStore = await cookies();
+      const bypassCookie = cookieStore.get(BYPASS_COOKIE);
+      if (bypassCookie?.value === bypassToken) {
+        return NextResponse.json({ isAllowed: true, isAdmin: false, reason: 'allowed' });
+      }
+    }
+
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
