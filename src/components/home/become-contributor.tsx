@@ -12,7 +12,7 @@ const contributorData: {
   description: string;
   icon: React.ReactNode;
   primaryAction: Action;
-  secondaryAction: Action;
+  secondaryAction: Action | null;
 }[] = [
   {
     variant: 'code',
@@ -67,10 +67,7 @@ const contributorData: {
       href: '/store',
       label: 'Learn More →',
     },
-    secondaryAction: {
-      href: '#',
-      label: 'Direct Donation',
-    },
+    secondaryAction: null,
   },
   {
     variant: 'sponsor' as const,
@@ -173,13 +170,15 @@ export function BecomeContributor() {
                 >
                   {item.primaryAction.label}
                 </Link>
-                <Link
-                  href={item.secondaryAction.href}
-                  className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  {...(item.secondaryAction.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                >
-                  {item.secondaryAction.label}
-                </Link>
+                {item.secondaryAction && (
+                  <Link
+                    href={item.secondaryAction.href}
+                    className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    {...(item.secondaryAction.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {item.secondaryAction.label}
+                  </Link>
+                )}
               </>
             }
           />
