@@ -239,9 +239,11 @@ function StatusDot({ label, status }: { label: string; status: 'online' | 'pendi
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-2">
       <div className={`h-2 w-2 rounded-full ${colors[status]}`} />
-      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-muted-foreground" style={{ writingMode: 'vertical-rl' }}>
+        {label}
+      </span>
     </div>
   );
 }
