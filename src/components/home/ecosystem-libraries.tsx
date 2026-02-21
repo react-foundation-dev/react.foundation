@@ -145,10 +145,10 @@ owner/repo:
         {showMissingLibraryIssue ? (
           <div className="space-y-3 rounded-2xl border border-border/10 bg-background/50 p-6">
             <p className="text-sm text-foreground/80">
-              Don&apos;t see a library? You can flag it here.
+              Don&apos;t see a library?
             </p>
             <ButtonLink href={issueUrl} variant="secondary" size="md" target="_blank" rel="noopener noreferrer">
-              See a missing library
+              Add a missing library
             </ButtonLink>
           </div>
         ) : null}

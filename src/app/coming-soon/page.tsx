@@ -1,16 +1,16 @@
 /**
- * Coming Soon Page - Cyberpunk/Neon Style
+ * Coming Soon Page
  * Blocks access to site unless user is on allowlist
  */
 
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { SiGithub } from '@icons-pack/react-simple-icons';
-import { ReactLogo3D } from '@/components/ui/react-logo-3d';
-import { Starfield } from '@/components/ui/starfield';
+import Link from 'next/link';
+import { Pill } from '@/components/ui/pill';
+import { Button } from '@/components/ui/button';
 import { RFDS } from '@/components/rfds';
 import {
   useAccessControl,
@@ -18,13 +18,30 @@ import {
   useAccessRequest,
 } from '@/lib/access-control/use-access-control';
 
-export default function ComingSoonPage() {
+function useComingSoonPageState(
+  isAuthenticated: boolean,
+  userEmail: string | null | undefined,
+) {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Business logic in custom hooks
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && userEmail) {
+      setShowRequestForm(true);
+    }
+  }, [isAuthenticated, userEmail]);
+
+  return { showRequestForm, isLoaded };
+}
+
+export default function ComingSoonPage() {
   const { isAuthenticated, userEmail } = useAccessControl();
-  useComingSoonRedirect(); // Auto-redirects if allowlisted
+  useComingSoonRedirect();
 
   const {
     setEmail,
@@ -36,156 +53,81 @@ export default function ComingSoonPage() {
     submitRequest,
   } = useAccessRequest();
 
-  const handleRequestAccess = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { showRequestForm, isLoaded } = useComingSoonPageState(isAuthenticated, userEmail);
 
-    // Use authenticated email
+  const handleRequestAccess = async (e: FormEvent) => {
+    e.preventDefault();
     if (userEmail) {
       setEmail(userEmail);
     }
-
     await submitRequest();
   };
 
-  // Fade in after a brief delay
-  React.useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Auto-show request form when user signs in
-  React.useEffect(() => {
-    if (isAuthenticated && userEmail) {
-      setShowRequestForm(true);
-    }
-  }, [isAuthenticated, userEmail]);
-
   return (
-    <div className={`dark fixed inset-0 overflow-hidden bg-slate-950 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-      {/* Cyberpunk Grid Background */}
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div
-          className="h-full w-full"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            transform: 'perspective(500px) rotateX(60deg)',
-            transformOrigin: 'center bottom',
-          }}
-        />
+    <div
+      className={`bg-background flex min-h-screen flex-col transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+    >
+      {/* Top blur gradient */}
+      <div className="absolute inset-x-0 top-[-6rem] -z-10 flex justify-center overflow-hidden blur-3xl">
+        <div className="h-[24rem] w-full max-w-[60rem] bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 opacity-30" />
       </div>
 
-      {/* Warm Gradient Overlay */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.08),_transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_35%,_rgba(251,146,60,0.15),_transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,_rgba(236,72,153,0.12),_transparent_45%)]" />
-      </div>
+      <div className="mx-auto flex max-w-3xl grow items-center px-6 py-16 sm:px-8">
+        <div className="flex flex-col items-center space-y-8 text-center">
+          <Pill>Early Access</Pill>
 
-      {/* Scanline Effect - Temporarily disabled */}
-      {/* <div
-        className="pointer-events-none absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: 'repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.5) 0px, transparent 1px, transparent 2px, rgba(0, 255, 255, 0.5) 3px)',
-        }}
-      /> */}
-
-      {/* Three.js Starfield */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <Starfield />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-y-auto px-4 py-8">
-        <div className="w-full max-w-2xl space-y-6 text-center">
-          {/* Logo/Icon Area with 3D React Logo */}
-          <div className="pointer-events-none relative mx-auto h-56 w-56">
-            <div className="absolute inset-0 animate-pulse rounded-full bg-primary/20 blur-3xl" />
-            <div className="relative h-full w-full">
-              <ReactLogo3D scale={0.5} />
-            </div>
-          </div>
-
-          {/* Title */}
-          <div className="space-y-2">
-            <h1 className="text-4xl font-black uppercase tracking-wider sm:text-5xl md:text-6xl">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-amber-400 to-orange-500 drop-shadow-[0_0_20px_rgba(0,255,255,0.5)]">
-                React Foundation
-              </span>
+          <div className="space-y-4">
+            <h1 className="text-5xl font-semibold leading-tight text-foreground sm:text-6xl">
+              React Foundation
             </h1>
-            <div className="flex items-center justify-center gap-2">
-              <div className="h-px w-8 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
-              <p className="text-lg font-bold uppercase tracking-[0.3em] text-cyan-400 sm:text-xl">
-                Coming Soon
-              </p>
-              <div className="h-px w-8 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
-            </div>
-          </div>
-
-          {/* Description */}
-          <p className="mx-auto max-w-xl text-sm text-cyan-100/80 sm:text-base">
-            We&apos;re building something <span className="font-bold text-cyan-400">revolutionary</span> for the React ecosystem.
-            Support open source maintainers, earn exclusive access, and shape the future of React together.
-          </p>
-
-          {/* Glitch Text Effect */}
-          <div className="py-2">
-            <div className="inline-block border border-primary/50 bg-slate-900/50 px-6 py-3 backdrop-blur-sm">
-              <p className="glitch-text font-mono text-sm uppercase tracking-wider text-pink-400">
-                [ System Initializing... ]
-              </p>
-            </div>
+            <p className="text-lg text-foreground/70">
+              We&apos;re building something revolutionary for the React ecosystem.
+              Support open source maintainers, earn exclusive access, and shape
+              the future of React together.
+            </p>
           </div>
 
           {/* Auth/Request Section */}
-          <div className="space-y-3">
+          <div className="w-full space-y-4">
             {!isAuthenticated && (
-              <div className="space-y-4">
-                <p className="text-sm text-slate-400">
+              <div className="space-y-4 rounded-3xl border border-border/10 bg-muted/60 p-8">
+                <p className="text-sm text-foreground/70">
                   Sign in with GitHub to request early access
                 </p>
-                {/* GitHub Sign In */}
-                <RFDS.Button
+                <Button
                   variant="secondary"
+                  size="lg"
                   onClick={() => signIn('github', { callbackUrl: '/' })}
-                  className="group relative w-full overflow-hidden border-2 border-cyan-400 bg-slate-900/80 px-4 py-3 sm:px-8 sm:py-4 font-bold uppercase tracking-wider text-sm sm:text-base text-cyan-400 dark:text-cyan-400 text-cyan-600 shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:bg-primary/10 hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]"
+                  className="w-full"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent opacity-0 transition group-hover:opacity-100" />
-                  <div className="relative flex items-center justify-center gap-2 sm:gap-3">
-                    <SiGithub className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <span className="text-cyan-400 dark:text-cyan-400 text-cyan-600">Sign in with GitHub</span>
-                  </div>
-                </RFDS.Button>
+                  <SiGithub className="h-5 w-5" />
+                  Sign in with GitHub
+                </Button>
               </div>
             )}
 
             {isAuthenticated && !showRequestForm && (
-              <div className="space-y-4">
-                <div className="rounded-lg border border-pink-500/50 bg-accent/10 p-6 backdrop-blur-sm">
-                  <p className="font-semibold text-pink-400">Access Restricted</p>
-                  <p className="mt-2 text-sm text-pink-100/80">
-                    You&apos;re signed in as <span className="font-mono text-cyan-400">{userEmail}</span> but
-                    you&apos;re not on the allowlist yet.
-                  </p>
-                </div>
+              <div className="space-y-2 rounded-3xl border border-destructive/20 bg-destructive/5 p-8">
+                <p className="font-semibold text-foreground">Access Restricted</p>
+                <p className="text-sm text-foreground/70">
+                  You&apos;re signed in as{' '}
+                  <span className="font-mono text-foreground">{userEmail}</span>{' '}
+                  but you&apos;re not on the allowlist yet.
+                </p>
               </div>
             )}
 
-            {/* Request Access Form */}
             {showRequestForm && isAuthenticated && userEmail && (
-              <div className="rounded-xl border border-primary/50 bg-slate-900/90 p-6 backdrop-blur-sm">
+              <div className="rounded-3xl border border-border/10 bg-muted/60 p-8">
                 {!submitted ? (
-                  <form onSubmit={handleRequestAccess} className="space-y-4">
+                  <form onSubmit={handleRequestAccess} className="space-y-5 text-left">
                     {error && (
-                      <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
-                        <p className="text-sm text-red-400 font-semibold">{error}</p>
+                      <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-4">
+                        <p className="text-sm font-semibold text-destructive">{error}</p>
                       </div>
                     )}
                     <div>
-                      <label className="mb-2 block text-left text-sm font-semibold uppercase tracking-wider text-cyan-400">
+                      <label className="mb-2 block text-sm font-semibold text-foreground">
                         GitHub Account
                       </label>
                       <RFDS.Input
@@ -193,15 +135,18 @@ export default function ComingSoonPage() {
                         required
                         value={userEmail}
                         disabled
-                        className="w-full rounded-lg border border-primary/50 bg-slate-900/30 px-4 py-3 font-mono text-cyan-100 opacity-75"
+                        className="w-full opacity-60"
                       />
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-foreground/50">
                         Using your authenticated GitHub email
                       </p>
                     </div>
                     <div>
-                      <label className="mb-2 block text-left text-sm font-semibold uppercase tracking-wider text-cyan-400">
-                        Why do you want access? <span className="text-xs font-normal text-cyan-500/60">(minimum 10 characters)</span>
+                      <label className="mb-2 block text-sm font-semibold text-foreground">
+                        Why do you want access?{' '}
+                        <span className="text-xs font-normal text-foreground/50">
+                          (minimum 10 characters)
+                        </span>
                       </label>
                       <RFDS.Textarea
                         required
@@ -209,27 +154,28 @@ export default function ComingSoonPage() {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         rows={4}
-                        className="w-full rounded-lg border border-primary/50 bg-slate-900/50 px-4 py-3 font-mono text-cyan-100 placeholder-cyan-500/30 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50"
+                        className="w-full"
                         placeholder="Tell us about your involvement in the React ecosystem..."
                       />
-                      <p className="mt-1 text-xs text-cyan-500/60">
+                      <p className="mt-1 text-xs text-foreground/50">
                         {message.trim().length}/10 characters minimum
                       </p>
                     </div>
-                    <RFDS.SemanticButton
+                    <Button
                       type="submit"
                       variant="primary"
+                      size="lg"
                       disabled={isSubmitting}
-                      className="w-full cursor-pointer rounded-lg border-2 border-cyan-400 bg-primary/10 px-6 py-3 font-bold uppercase tracking-wider text-cyan-400 shadow-[0_0_20px_rgba(0,255,255,0.3)] transition hover:bg-primary/50/20 hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] disabled:opacity-50"
+                      className="w-full"
                     >
                       {isSubmitting ? 'Sending...' : 'Request Access'}
-                    </RFDS.SemanticButton>
+                    </Button>
                   </form>
                 ) : (
-                  <div className="space-y-3 py-4">
+                  <div className="space-y-3 py-4 text-center">
                     <div className="text-4xl">✓</div>
-                    <p className="font-bold text-cyan-400">Request Sent!</p>
-                    <p className="text-sm text-cyan-100/70">
+                    <p className="font-semibold text-foreground">Request Sent!</p>
+                    <p className="text-sm text-foreground/70">
                       We&apos;ll review your request and get back to you soon.
                     </p>
                   </div>
@@ -239,7 +185,7 @@ export default function ComingSoonPage() {
           </div>
 
           {/* Status Indicators */}
-          <div className="flex items-center justify-center gap-6 pt-6">
+          <div className="flex items-center justify-center gap-6 pt-2">
             <StatusDot label="Backend" status="online" />
             <StatusDot label="API" status="online" />
             <StatusDot label="Launch" status="pending" />
@@ -247,90 +193,41 @@ export default function ComingSoonPage() {
         </div>
       </div>
 
-      {/* Fixed Footer */}
-      <div className="fixed bottom-6 left-0 right-0 z-20 text-center">
-        <p className="font-mono text-xs uppercase tracking-widest text-primary/50">
-          Copyright © The Linux Foundation®. All rights reserved. The Linux Foundation has
-          registered trademarks and uses trademarks. For more information, including terms
-          of use, privacy policy, and trademark usage, please see our {" "}
-          <Link className="underline hover:text-foreground" href="https://www.linuxfoundation.org/legal/policies?__hstc=262006610.e1a66f67cd0c0baa5c7b042e4f9911ce.1768952497248.1771462813100.1771610134177.3&__hssc=262006610.1.1771610134177&__hsfp=360811d5cbd407fc58d506f8b0aa3133">
-            Policies page
-          </Link>
-          .
-        </p>
-      </div>
-
-      {/* Add animations */}
-      <style>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) translateX(0px);
-            opacity: 0;
-          }
-          50% {
-            transform: translateY(-100px) translateX(50px);
-            opacity: 1;
-          }
-        }
-
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes glitch {
-          0%, 10% {
-            transform: translate(0);
-            text-shadow: none;
-          }
-          12% {
-            transform: translate(-3px, 2px);
-            text-shadow: 3px -2px 0 rgba(0, 255, 255, 0.8), -3px 2px 0 rgba(255, 0, 255, 0.8);
-          }
-          14% {
-            transform: translate(2px, -2px);
-            text-shadow: -2px 3px 0 rgba(0, 255, 255, 0.8), 2px -3px 0 rgba(255, 0, 255, 0.8);
-          }
-          16% {
-            transform: translate(-2px, 1px);
-            text-shadow: 4px 0 0 rgba(0, 255, 255, 0.8), -4px 0 0 rgba(255, 0, 255, 0.8);
-          }
-          18%, 100% {
-            transform: translate(0);
-            text-shadow: none;
-          }
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
-        }
-
-        .glitch-text {
-          animation: glitch 3s infinite;
-          position: relative;
-        }
-      `}</style>
+      <footer className="border-t border-border/10 py-10 text-sm text-foreground/50">
+        <div className="mx-auto max-w-3xl px-6 sm:px-8">
+          <div className="flex flex-wrap gap-6 sm:justify-end">
+            <Link className="transition hover:text-foreground" href="/privacy">Privacy</Link>
+            <Link className="transition hover:text-foreground" href="/terms">Terms</Link>
+          </div>
+          <p className="mt-4 leading-relaxed">
+            Copyright © The Linux Foundation®. All rights reserved. The Linux Foundation has
+            registered trademarks and uses trademarks. For more information, including terms
+            of use, privacy policy, and trademark usage, please see our{' '}
+            <Link
+              className="underline hover:text-foreground"
+              href="https://www.linuxfoundation.org/legal/policies?__hstc=262006610.e1a66f67cd0c0baa5c7b042e4f9911ce.1768952497248.1771462813100.1771610134177.3&__hssc=262006610.1.1771610134177&__hsfp=360811d5cbd407fc58d506f8b0aa3133"
+            >
+              Policies page
+            </Link>
+            .
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
 
 function StatusDot({ label, status }: { label: string; status: 'online' | 'pending' | 'offline' }) {
   const colors = {
-    online: 'bg-success/50 shadow-[0_0_10px_rgba(34,197,94,0.8)]',
-    pending: 'bg-warning/50 shadow-[0_0_10px_rgba(250,204,21,0.8)] animate-pulse',
-    offline: 'bg-destructive/50 shadow-[0_0_10px_rgba(239,68,68,0.8)]',
+    online: 'bg-success',
+    pending: 'bg-warning animate-pulse',
+    offline: 'bg-destructive',
   };
 
   return (
     <div className="flex items-center gap-2">
       <div className={`h-2 w-2 rounded-full ${colors[status]}`} />
-      <span className="font-mono text-xs uppercase tracking-wider text-primary/70">
-        {label}
-      </span>
+      <span className="text-xs text-muted-foreground">{label}</span>
     </div>
   );
 }
