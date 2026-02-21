@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { Footer } from "@/components/layout/footer";
 
@@ -32,12 +31,9 @@ export default function StorePage() {
             <ButtonLink href="/" variant="secondary" size="lg">
               Back to Home
             </ButtonLink>
-            <Link
-              href="/about"
-              className="inline-flex rounded-full border-2 border-border px-6 py-3 text-sm font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-            >
+            <ButtonLink href="/about" variant="tertiary" size="lg">
               Learn About the Foundation
-            </Link>
+            </ButtonLink>
           </div>
         </div>
       </div>
