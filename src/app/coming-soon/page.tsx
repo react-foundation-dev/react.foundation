@@ -7,6 +7,7 @@
 
 import { memo, useState, useEffect, useRef, type FormEvent, type RefObject } from 'react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import Link from 'next/link';
 import { Pill } from '@/components/ui/pill';
@@ -148,9 +149,41 @@ function useProgressAnimation(
   return { visibleCount };
 }
 
+const CONFETTI_COLORS = ['#22d3ee', '#3b82f6', '#a855f7', '#f59e0b', '#10b981'];
+
+function useLaunchSequence() {
+  const router = useRouter();
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  useEffect(() => {
+    const msUntilLaunch = LAUNCH_DATE_MS - Date.now();
+
+    async function triggerLaunch() {
+      setIsLaunching(true);
+      const confetti = (await import('canvas-confetti')).default;
+      confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 }, colors: CONFETTI_COLORS });
+      setTimeout(() => confetti({ particleCount: 80, spread: 130, origin: { y: 0.55, x: 0.2 }, colors: CONFETTI_COLORS }), 220);
+      setTimeout(() => confetti({ particleCount: 80, spread: 130, origin: { y: 0.55, x: 0.8 }, colors: CONFETTI_COLORS }), 400);
+      setTimeout(() => confetti({ particleCount: 60, spread: 80, origin: { y: 0.4 }, colors: CONFETTI_COLORS }), 650);
+      setTimeout(() => router.push('/'), 2000);
+    }
+
+    if (msUntilLaunch <= 0) {
+      const t = setTimeout(triggerLaunch, 400);
+      return () => clearTimeout(t);
+    }
+
+    const t = setTimeout(triggerLaunch, msUntilLaunch);
+    return () => clearTimeout(t);
+  }, [router]);
+
+  return { isLaunching };
+}
+
 export default function ComingSoonPage() {
   const { isAuthenticated, userEmail } = useAccessControl();
   useComingSoonRedirect();
+  const { isLaunching } = useLaunchSequence();
 
   const {
     setEmail,
@@ -174,7 +207,7 @@ export default function ComingSoonPage() {
 
   return (
     <div
-      className={`bg-background flex min-h-screen flex-col transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+      className={`bg-background flex min-h-screen flex-col transition-[opacity,transform,filter] ${isLaunching ? 'duration-[1800ms]' : 'duration-700'} ${isLoaded && !isLaunching ? 'opacity-100 scale-100 blur-0' : isLaunching ? 'opacity-0 scale-105 blur-sm pointer-events-none' : 'opacity-0 scale-100 blur-0'}`}
     >
       {/* Top blur gradient */}
       <div className="absolute inset-x-0 top-[-6rem] -z-10 flex justify-center overflow-hidden blur-3xl">

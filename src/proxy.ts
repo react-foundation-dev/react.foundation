@@ -8,6 +8,9 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { logger } from '@/lib/logger';
 
+// After this moment the site is public — no access restrictions
+const LAUNCH_DATE_MS = new Date('2026-02-24T17:30:00Z').getTime();
+
 // Public routes that don't require allowlist
 const PUBLIC_ROUTES = [
   '/coming-soon',
@@ -50,6 +53,11 @@ const BYPASS_COOKIE = '_rf_bypass';
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Site is fully public after launch
+  if (Date.now() >= LAUNCH_DATE_MS) {
+    return NextResponse.next();
+  }
 
   // Check for bypass token in URL param — set cookie and redirect without param
   const bypassToken = process.env.BYPASS_AUTH_TOKEN?.trim();

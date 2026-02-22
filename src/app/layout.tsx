@@ -78,6 +78,16 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script
+          defer
+          data-domain="react.foundation"
+          src="https://sentinel.react.foundation/js/script.js"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`,
+          }}
+        />
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
