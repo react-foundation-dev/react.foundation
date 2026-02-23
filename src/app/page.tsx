@@ -5,6 +5,7 @@ import { MissionStatement } from "@/components/home/mission-statement";
 import { ThreePillars } from "@/components/home/three-pillars";
 import { BecomeContributor } from "@/components/home/become-contributor";
 import { JoinMovementCTA } from "@/components/home/join-movement-cta";
+import { FoundingMembers } from "@/components/home/founding-members";
 
 export const metadata: Metadata = {
   title: "React Foundation",
@@ -25,6 +26,7 @@ export default function FoundationHome() {
           <MissionStatement />
           <ThreePillars />
           <BecomeContributor />
+          <FoundingMembers />
           <JoinMovementCTA />
         </main>
       </div>
