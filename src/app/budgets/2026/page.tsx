@@ -208,9 +208,9 @@ export default function Budget2026Page() {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {revenues.map((r) => (
-              <div key={r.name} className="relative flex items-center justify-between overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white px-6 py-5 shadow-sm transition-transform transition-shadow hover:-translate-y-0.5 hover:shadow-md">
+              <div key={r.name} className="relative flex items-center justify-between rounded-2xl border border-[#e5e7eb] bg-white px-6 py-5 shadow-sm transition-transform transition-shadow hover:-translate-y-0.5 hover:shadow-md">
                 {r.tag && (
-                  <span className="absolute top-[10px] right-[-28px] rotate-45 bg-[#087ea4] px-8 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white shadow-sm">
+                  <span className="absolute -top-2.5 right-3 z-10 rounded-full bg-[#087ea4] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
                     {r.tag}
                   </span>
                 )}
