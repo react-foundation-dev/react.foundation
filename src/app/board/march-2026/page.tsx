@@ -164,6 +164,7 @@ const otherAttendees: Attendee[] = [
 
 type MinutesSection = {
   title: string;
+  agendaItem?: number;
   paragraphs: string[];
   bullets?: string[];
   decision?: string;
@@ -172,18 +173,21 @@ type MinutesSection = {
 const minutesSections: MinutesSection[] = [
   {
     title: "Call to Order",
+    agendaItem: 1,
     paragraphs: [
       "The meeting commenced at 10:05 am US Eastern Time. Attendance was taken, quorum was assessed, and introductions were made among participants.",
     ],
   },
   {
     title: "Overview",
+    agendaItem: 2,
     paragraphs: [
       "Seth Webster welcomed the Governing Board and provided an overview of the React Foundation's mission, emphasizing stability, community investment, global expansion, and operational maturity in the first year.",
     ],
   },
   {
     title: "Year 1 Budget",
+    agendaItem: 3,
     paragraphs: [
       "Seth presented the proposed Year 1 budget. Discussion included:",
     ],
@@ -198,6 +202,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Year 1 Budget — Discussion",
+    agendaItem: 3,
     paragraphs: [
       "Matt Carroll confirmed that Meta will cover CI/CD infrastructure costs for 2026 and outlined ongoing work to transition infrastructure to the Foundation.",
       "It was noted that the budget is a preliminary, high-level framework intended to enable operations and will be iterated throughout the year, including reallocation across categories as priorities evolve.",
@@ -209,6 +214,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Executive Director",
+    agendaItem: 4,
     paragraphs: [
       "Matt Carroll called for a vote to appoint Seth Webster as Executive Director.",
     ],
@@ -216,6 +222,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Governance and Meeting Cadence",
+    agendaItem: 5,
     paragraphs: [
       "The Governing Board agreed to meet every two months (six times per year).",
       "Seth proposed holding an in-person Governing Board meeting to further develop priorities and operational plans.",
@@ -223,6 +230,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Communication",
+    agendaItem: 5,
     paragraphs: [
       "A Discord server has been established for Foundation coordination. The Governing Board agreed to:",
     ],
@@ -234,6 +242,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Program and Activity Updates",
+    agendaItem: 6,
     paragraphs: [
       "Seth provided updates on current activities:",
     ],
@@ -247,6 +256,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Roles and Next Steps",
+    agendaItem: 7,
     paragraphs: [
       "Seth outlined expected shifts in engineering contributions: Meta's engineering investment is expected to evolve over time, and broader ecosystem participation is required to sustain and accelerate development.",
       "Seth requested that each member organization evaluate contributing approximately 2–3 engineers (full-time or partial) to support React and React Native under the Foundation.",
@@ -260,6 +270,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Technical Governance",
+    agendaItem: 6,
     paragraphs: [
       "Technical governance is being developed as a separate structure from the Governing Board.",
     ],
@@ -271,6 +282,7 @@ const minutesSections: MinutesSection[] = [
   },
   {
     title: "Closing",
+    agendaItem: 9,
     paragraphs: [
       "With no further business, the meeting was adjourned at 11:05 am US Eastern Time.",
     ],
@@ -298,23 +310,6 @@ export default function BoardMeetingAgendaPage() {
               </h1>
               <p className="text-base text-[#6b7280]">Inaugural Board Meeting — March 20, 2026</p>
             </div>
-          </div>
-          <div className="mx-auto max-w-xl">
-            <a
-              href="https://docs.google.com/document/d/1MzEZ3gEPCqxmaLvwTbHCoG4xDwwVVc8z8y952wRHmLA/edit?tab=t.0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#e5e7eb] bg-white px-4 py-2 text-sm font-medium text-[#374151] shadow-sm transition-colors hover:bg-[#f3f4f6]"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <polyline points="10 9 9 9 8 9" />
-              </svg>
-              Open in Google Docs
-            </a>
           </div>
         </div>
 
@@ -445,7 +440,15 @@ function AttendanceList({ title, attendees, color }: { title: string; attendees:
 function MinutesBlock({ section, isLast }: { section: MinutesSection; isLast: boolean }) {
   return (
     <div className={`${isLast ? "" : "mb-6 pb-6 border-b border-[#f3f4f6]"}`}>
-      <h3 className="text-base font-bold text-[#23272f] mb-2">{section.title}</h3>
+      <div className="flex items-center gap-3 mb-2">
+        <h3 className="text-base font-bold text-[#23272f]">{section.title}</h3>
+        {section.agendaItem && (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#087ea4]/10 px-2.5 py-0.5 text-xs font-medium text-[#087ea4]">
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#087ea4] text-[10px] font-bold text-white">{section.agendaItem}</span>
+            Agenda
+          </span>
+        )}
+      </div>
       {section.paragraphs.map((p, i) => (
         <p key={i} className="text-sm text-[#374151] leading-relaxed mb-2">{p}</p>
       ))}
