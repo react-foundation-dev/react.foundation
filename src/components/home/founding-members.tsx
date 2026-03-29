@@ -63,7 +63,11 @@ const FOUNDING_MEMBERS: Member[] = [
     filter: WHITE_FILTER,
     maxWidth: 90,
   },
-  { name: "Callstack", text: "{callstack}", textSize: "text-lg" },
+  {
+    name: "Callstack",
+    src: "/assets/founding-members/callstack.svg",
+    maxWidth: 120,
+  },
   {
     name: "Vercel",
     src: "/assets/founding-members/vercel.svg",
