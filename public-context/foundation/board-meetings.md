@@ -91,4 +91,4 @@ Technical governance is being developed as a separate structure from the Governi
 - Date: March 20, 2026
 - Time: 10:05 AM - 11:05 AM US Eastern Time
 - Location: Zoom
-- Page: /board/march-2026
+- Page: /_board/march-2026

@@ -32,7 +32,7 @@ const agenda: AgendaItem[] = [
   {
     title: "Presentation and Discussion of the Year 1 Budget",
     bullets: [
-      { text: "Walkthrough of the proposed foundation budget", link: "/budgets/2026", sub: [] },
+      { text: "Walkthrough of the proposed foundation budget", link: "/_budgets/2026", sub: [] },
       "Board discussion and questions",
     ],
     vote: "Motion to approve FY1 budget",
