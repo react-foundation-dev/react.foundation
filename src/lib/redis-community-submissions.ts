@@ -8,6 +8,7 @@
  */
 
 import type { CommunitySubmission } from '@/types/community-submission';
+import type { Community } from '@/types/community';
 
 const SUBMISSIONS_INDEX_KEY = 'community_submissions:index';
 const SUBMISSION_KEY_PREFIX = 'community_submissions:';
@@ -44,7 +45,10 @@ export async function getSubmissions(): Promise<CommunitySubmission[]> {
   if (ids.length === 0) return [];
 
   const keys = ids.map(id => getSubmissionKey(id));
-  const values = await redis.mget(...keys);
+  const pipeline = redis.pipeline();
+  keys.forEach(k => pipeline.get(k));
+  const results = await pipeline.exec();
+  const values = results?.map(([, v]) => v as string | null) ?? [];
 
   return values
     .filter((v): v is string => v !== null)
@@ -103,17 +107,30 @@ export async function updateSubmission(
  */
 export async function approveSubmissionAtomic(
   submissionId: string,
-  community: import('@/types/community').Community
+  community: Community
 ): Promise<void> {
   const redis = await getRedis();
   if (!redis) throw new Error('Redis not available');
 
-  const tx = redis.multi();
-  tx.set(`communities:${community.id}`, JSON.stringify(community));
-  tx.sadd('communities:index', community.id);
-  tx.del(getSubmissionKey(submissionId));
-  tx.srem(SUBMISSIONS_INDEX_KEY, submissionId);
-  await tx.exec();
+  const submissionKey = getSubmissionKey(submissionId);
+  await redis.watch(submissionKey);
+
+  const existing = await redis.get(submissionKey);
+  if (!existing) {
+    await redis.unwatch();
+    throw new Error('Submission already processed');
+  }
+
+  const result = await redis.multi()
+    .set(`communities:${community.id}`, JSON.stringify(community))
+    .sadd('communities:index', community.id)
+    .del(submissionKey)
+    .srem(SUBMISSIONS_INDEX_KEY, submissionId)
+    .exec();
+
+  if (!result) {
+    throw new Error('Concurrent approval detected');
+  }
 }
 
 export async function deleteSubmission(id: string): Promise<void> {

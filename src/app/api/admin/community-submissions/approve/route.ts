@@ -13,10 +13,12 @@ import { getSubmissionById, approveSubmissionAtomic } from '@/lib/redis-communit
 import type { Community } from '@/types/community';
 
 function slugify(name: string): string {
-  return name
+  const slug = name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+  if (!slug) throw new Error(`Could not generate slug from name: "${name}"`);
+  return slug;
 }
 
 export async function POST(request: NextRequest) {
@@ -81,7 +83,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, communityId });
   } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to approve';
+    const status = message.includes('Concurrent') || message.includes('already processed') ? 409 : 500;
     console.error('Error approving submission:', error);
-    return NextResponse.json({ error: 'Failed to approve' }, { status: 500 });
+    return NextResponse.json({ error: message }, { status });
   }
 }

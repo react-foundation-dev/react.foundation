@@ -6,6 +6,7 @@
 import { getRedisClient } from '@/lib/redis';
 import { getCommunities, migrateFromOldFormat } from '@/lib/redis-communities';
 import { getSubmissions } from '@/lib/redis-community-submissions';
+import type { CommunitySubmission } from '@/types/community-submission';
 import { RFDS } from '@/components/rfds';
 import { MigrationButton } from './migration-button';
 import { CommunitiesTable } from '@/components/admin/CommunitiesTable';
@@ -42,7 +43,7 @@ async function getCommunitiesData() {
     const countries = new Set(communities.map(c => c.country)).size;
     const totalMembers = communities.reduce((sum, c) => sum + (c.member_count || 0), 0);
 
-    let pendingSubmissions: import('@/types/community-submission').CommunitySubmission[] = [];
+    let pendingSubmissions: CommunitySubmission[] = [];
     try {
       const submissions = await getSubmissions();
       pendingSubmissions = submissions.filter(s => s.verification_status === 'pending');

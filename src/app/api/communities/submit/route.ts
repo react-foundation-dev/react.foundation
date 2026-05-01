@@ -32,6 +32,20 @@ export async function POST(request: Request) {
       }
     }
 
+    const maxLengths: Record<string, number> = {
+      name: 200, address: 500, city: 100, country: 100,
+      description: 2000, organizer_name: 200, organizer_email: 254,
+      meetup_url: 500, website: 500,
+    };
+    for (const [field, max] of Object.entries(maxLengths)) {
+      if (typeof body[field] === 'string' && body[field].length > max) {
+        return NextResponse.json(
+          { success: false, error: `${field} exceeds ${max} characters` },
+          { status: 400 }
+        );
+      }
+    }
+
     const now = new Date().toISOString();
     const submission: CommunitySubmission = {
       id: `submission-${crypto.randomUUID()}`,
