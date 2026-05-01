@@ -6,10 +6,11 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { saveSubmission } from '@/lib/redis-community-submissions';
+import type { CommunitySubmission } from '@/types/community-submission';
 
 export async function POST(request: Request) {
   try {
-    // Verify authentication
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -21,7 +22,6 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    // Validate required fields
     const required = ['name', 'address', 'city', 'country', 'description', 'organizer_name', 'organizer_email'];
     for (const field of required) {
       if (!body[field]) {
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create submission record
-    const submission = {
+    const now = new Date().toISOString();
+    const submission: CommunitySubmission = {
       id: `submission-${Date.now()}`,
       name: body.name,
       address: body.address,
@@ -48,25 +48,20 @@ export async function POST(request: Request) {
       submitted_by: session.user.email,
       verification_status: 'pending',
       geocoded: false,
-      submitted_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      submitted_at: now,
+      created_at: now,
+      updated_at: now,
     };
 
-    console.log('📝 New community submission:', submission);
-
-    // TODO: Store in Redis pending queue: pending_communities:{id}
-    // TODO: Geocode address to get coordinates
-    // TODO: Send email notification to admins
-    // TODO: Add to admin review queue
+    await saveSubmission(submission);
 
     return NextResponse.json({
       success: true,
       message: 'Community submitted successfully. We will review and add it soon!',
     });
 
-  } catch (error: any) {
-    console.error('❌ Community submission failed:', error);
+  } catch (error: unknown) {
+    console.error('Community submission failed:', error);
     return NextResponse.json(
       { success: false, error: 'Submission failed' },
       { status: 500 }

@@ -1,0 +1,98 @@
+/**
+ * Approve Community Submission API
+ * POST /api/admin/community-submissions/approve
+ *
+ * Converts a pending submission into a full Community in Redis.
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { UserManagementService } from '@/lib/admin/user-management-service';
+import { getSubmissionById, updateSubmission, deleteSubmission } from '@/lib/redis-community-submissions';
+import { addCommunity } from '@/lib/redis-communities';
+import type { Community } from '@/types/community';
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    const isAdmin = await UserManagementService.isAdmin(session.user.email);
+    if (!isAdmin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
+    const { id } = await request.json();
+    if (!id) {
+      return NextResponse.json({ error: 'Submission ID required' }, { status: 400 });
+    }
+
+    const submission = await getSubmissionById(id);
+    if (!submission) {
+      return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
+    }
+
+    // Mark as approved
+    await updateSubmission(id, {
+      verification_status: 'approved',
+      reviewed_by: session.user.email,
+      reviewed_at: new Date().toISOString(),
+    });
+
+    // Convert to Community
+    const now = new Date().toISOString();
+    const community: Community = {
+      id: `community-${Date.now()}`,
+      name: submission.name,
+      slug: slugify(submission.name),
+      city: submission.city,
+      country: submission.country,
+      region: submission.region,
+      timezone: submission.timezone ?? 'UTC',
+      coordinates: submission.coordinates ?? { lat: 0, lng: 0 },
+      organizers: [
+        {
+          id: `org-${Date.now()}`,
+          name: submission.organizer_name,
+          role: 'Lead Organizer',
+        },
+      ],
+      founded_date: now,
+      event_types: ['meetup'],
+      website: submission.website,
+      meetup_url: submission.meetup_url,
+      description: submission.description,
+      member_count: submission.member_count ?? 0,
+      typical_attendance: 0,
+      meeting_frequency: 'monthly',
+      primary_language: 'English',
+      status: 'new',
+      invite_only: false,
+      verified: false,
+      verification_status: 'pending',
+      cois_tier: 'none',
+      created_at: now,
+      updated_at: now,
+    };
+
+    await addCommunity(community);
+
+    // Remove from submissions queue
+    await deleteSubmission(id);
+
+    return NextResponse.json({ success: true, communityId: community.id });
+  } catch (error: unknown) {
+    console.error('Error approving submission:', error);
+    return NextResponse.json({ error: 'Failed to approve' }, { status: 500 });
+  }
+}
