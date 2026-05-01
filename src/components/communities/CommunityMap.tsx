@@ -284,13 +284,13 @@ export function CommunityMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {communities.map((community) => {
+        {communities.filter((c) => c.coordinates).map((community) => {
           const iconOptions = createCustomIcon(community.cois_tier, community.status);
 
           return (
             <Marker
               key={community.id}
-              position={[community.coordinates.lat, community.coordinates.lng]}
+              position={[community.coordinates!.lat, community.coordinates!.lng]}
               icon={
                 iconOptions && L
                   ? L.divIcon(iconOptions)

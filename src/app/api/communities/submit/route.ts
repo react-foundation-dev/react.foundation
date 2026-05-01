@@ -6,10 +6,11 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { saveSubmission } from '@/lib/redis-community-submissions';
+import type { CommunitySubmission } from '@/types/community-submission';
 
 export async function POST(request: Request) {
   try {
-    // Verify authentication
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -21,7 +22,6 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    // Validate required fields
     const required = ['name', 'address', 'city', 'country', 'description', 'organizer_name', 'organizer_email'];
     for (const field of required) {
       if (!body[field]) {
@@ -32,9 +32,23 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create submission record
-    const submission = {
-      id: `submission-${Date.now()}`,
+    const maxLengths: Record<string, number> = {
+      name: 200, address: 500, city: 100, country: 100,
+      description: 2000, organizer_name: 200, organizer_email: 254,
+      meetup_url: 500, website: 500,
+    };
+    for (const [field, max] of Object.entries(maxLengths)) {
+      if (typeof body[field] === 'string' && body[field].length > max) {
+        return NextResponse.json(
+          { success: false, error: `${field} exceeds ${max} characters` },
+          { status: 400 }
+        );
+      }
+    }
+
+    const now = new Date().toISOString();
+    const submission: CommunitySubmission = {
+      id: `submission-${crypto.randomUUID()}`,
       name: body.name,
       address: body.address,
       city: body.city,
@@ -48,25 +62,20 @@ export async function POST(request: Request) {
       submitted_by: session.user.email,
       verification_status: 'pending',
       geocoded: false,
-      submitted_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      submitted_at: now,
+      created_at: now,
+      updated_at: now,
     };
 
-    console.log('📝 New community submission:', submission);
-
-    // TODO: Store in Redis pending queue: pending_communities:{id}
-    // TODO: Geocode address to get coordinates
-    // TODO: Send email notification to admins
-    // TODO: Add to admin review queue
+    await saveSubmission(submission);
 
     return NextResponse.json({
       success: true,
       message: 'Community submitted successfully. We will review and add it soon!',
     });
 
-  } catch (error: any) {
-    console.error('❌ Community submission failed:', error);
+  } catch (error: unknown) {
+    console.error('Community submission failed:', error);
     return NextResponse.json(
       { success: false, error: 'Submission failed' },
       { status: 500 }

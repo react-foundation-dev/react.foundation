@@ -282,10 +282,12 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                 </h3>
                 <div className="space-y-3 text-sm">
                   <InfoRow label="Timezone" value={community.timezone} />
-                  <InfoRow
-                    label="Location"
-                    value={`${community.coordinates.lat.toFixed(4)}, ${community.coordinates.lng.toFixed(4)}`}
-                  />
+                  {community.coordinates && (
+                    <InfoRow
+                      label="Location"
+                      value={`${community.coordinates.lat.toFixed(4)}, ${community.coordinates.lng.toFixed(4)}`}
+                    />
+                  )}
                   {community.founded_date && (
                     <InfoRow
                       label="Founded"
