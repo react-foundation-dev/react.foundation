@@ -9,8 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserManagementService } from '@/lib/admin/user-management-service';
-import { getSubmissionById } from '@/lib/redis-community-submissions';
-import { approveSubmissionAtomic } from '@/lib/redis-community-submissions';
+import { getSubmissionById, approveSubmissionAtomic } from '@/lib/redis-community-submissions';
 import type { Community } from '@/types/community';
 
 function slugify(name: string): string {
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
       primary_language: 'English',
       status: 'new',
       invite_only: false,
-      verified: false,
+      verified: true,
       verification_status: 'verified',
       cois_tier: 'none',
       created_at: now,

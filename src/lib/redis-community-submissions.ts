@@ -69,24 +69,37 @@ export async function updateSubmission(
   const redis = await getRedis();
   if (!redis) throw new Error('Redis not available');
 
-  const existing = await redis.get(getSubmissionKey(id));
-  if (!existing) throw new Error(`Submission ${id} not found`);
+  const key = getSubmissionKey(id);
+
+  // WATCH key for optimistic locking — if another request modifies
+  // the key between GET and EXEC, the transaction aborts.
+  await redis.watch(key);
+
+  const existing = await redis.get(key);
+  if (!existing) {
+    await redis.unwatch();
+    throw new Error(`Submission ${id} not found`);
+  }
 
   const submission = JSON.parse(existing) as CommunitySubmission;
   const updated: CommunitySubmission = {
     ...submission,
     ...updates,
-    id, // prevent ID changes
+    id,
     updated_at: new Date().toISOString(),
   };
 
-  await redis.set(getSubmissionKey(id), JSON.stringify(updated));
+  const result = await redis.multi().set(key, JSON.stringify(updated)).exec();
+  if (!result) {
+    throw new Error(`Concurrent modification on submission ${id}, retry`);
+  }
+
   return updated;
 }
 
 /**
- * Atomically: add community to Redis + remove submission from queue.
- * Single pipeline ensures no partial state if one op fails.
+ * Atomically add community to Redis + remove submission from queue.
+ * Uses MULTI/EXEC transaction so all ops succeed or none do.
  */
 export async function approveSubmissionAtomic(
   submissionId: string,
@@ -95,14 +108,12 @@ export async function approveSubmissionAtomic(
   const redis = await getRedis();
   if (!redis) throw new Error('Redis not available');
 
-  const pipeline = redis.pipeline();
-  // Add community
-  pipeline.set(`communities:${community.id}`, JSON.stringify(community));
-  pipeline.sadd('communities:index', community.id);
-  // Remove submission
-  pipeline.del(getSubmissionKey(submissionId));
-  pipeline.srem(SUBMISSIONS_INDEX_KEY, submissionId);
-  await pipeline.exec();
+  const tx = redis.multi();
+  tx.set(`communities:${community.id}`, JSON.stringify(community));
+  tx.sadd('communities:index', community.id);
+  tx.del(getSubmissionKey(submissionId));
+  tx.srem(SUBMISSIONS_INDEX_KEY, submissionId);
+  await tx.exec();
 }
 
 export async function deleteSubmission(id: string): Promise<void> {

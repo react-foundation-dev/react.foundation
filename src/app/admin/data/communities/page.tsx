@@ -42,8 +42,13 @@ async function getCommunitiesData() {
     const countries = new Set(communities.map(c => c.country)).size;
     const totalMembers = communities.reduce((sum, c) => sum + (c.member_count || 0), 0);
 
-    const submissions = await getSubmissions();
-    const pendingSubmissions = submissions.filter(s => s.verification_status === 'pending');
+    let pendingSubmissions: import('@/types/community-submission').CommunitySubmission[] = [];
+    try {
+      const submissions = await getSubmissions();
+      pendingSubmissions = submissions.filter(s => s.verification_status === 'pending');
+    } catch (error) {
+      console.error('Failed to fetch submissions:', error);
+    }
 
     return {
       communityKeys: communityKeys.length,
