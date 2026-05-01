@@ -20,7 +20,8 @@ async function getRedis() {
   try {
     const { getRedisClient } = await import('./redis');
     return getRedisClient();
-  } catch {
+  } catch (error) {
+    console.error('Redis unavailable for community submissions:', error);
     return null;
   }
 }
@@ -42,13 +43,13 @@ export async function getSubmissions(): Promise<CommunitySubmission[]> {
   const ids = await redis.smembers(SUBMISSIONS_INDEX_KEY);
   if (ids.length === 0) return [];
 
-  const values = await Promise.all(
-    ids.map(id => redis.get(getSubmissionKey(id)))
-  );
+  const keys = ids.map(id => getSubmissionKey(id));
+  const values = await redis.mget(...keys);
 
   return values
     .filter((v): v is string => v !== null)
-    .map(v => JSON.parse(v) as CommunitySubmission);
+    .map(v => JSON.parse(v) as CommunitySubmission)
+    .sort((a, b) => b.submitted_at.localeCompare(a.submitted_at));
 }
 
 export async function getSubmissionById(id: string): Promise<CommunitySubmission | null> {
@@ -81,6 +82,27 @@ export async function updateSubmission(
 
   await redis.set(getSubmissionKey(id), JSON.stringify(updated));
   return updated;
+}
+
+/**
+ * Atomically: add community to Redis + remove submission from queue.
+ * Single pipeline ensures no partial state if one op fails.
+ */
+export async function approveSubmissionAtomic(
+  submissionId: string,
+  community: import('@/types/community').Community
+): Promise<void> {
+  const redis = await getRedis();
+  if (!redis) throw new Error('Redis not available');
+
+  const pipeline = redis.pipeline();
+  // Add community
+  pipeline.set(`communities:${community.id}`, JSON.stringify(community));
+  pipeline.sadd('communities:index', community.id);
+  // Remove submission
+  pipeline.del(getSubmissionKey(submissionId));
+  pipeline.srem(SUBMISSIONS_INDEX_KEY, submissionId);
+  await pipeline.exec();
 }
 
 export async function deleteSubmission(id: string): Promise<void> {

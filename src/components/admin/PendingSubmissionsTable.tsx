@@ -19,9 +19,11 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [errorId, setErrorId] = useState<string | null>(null);
 
   async function handleApprove(id: string) {
     setLoadingId(id);
+    setErrorId(null);
     try {
       const res = await fetch('/api/admin/community-submissions/approve', {
         method: 'POST',
@@ -30,8 +32,8 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
       });
       if (!res.ok) throw new Error('Failed to approve');
       router.refresh();
-    } catch (err) {
-      console.error('Approve failed:', err);
+    } catch {
+      setErrorId(id);
     } finally {
       setLoadingId(null);
     }
@@ -39,6 +41,7 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
 
   async function handleReject(id: string) {
     setLoadingId(id);
+    setErrorId(null);
     try {
       const res = await fetch('/api/admin/community-submissions/reject', {
         method: 'POST',
@@ -49,11 +52,22 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
       setRejectingId(null);
       setRejectReason('');
       router.refresh();
-    } catch (err) {
-      console.error('Reject failed:', err);
+    } catch {
+      setErrorId(id);
     } finally {
       setLoadingId(null);
     }
+  }
+
+  function startReject(id: string) {
+    setRejectingId(id);
+    setRejectReason('');
+    setErrorId(null);
+  }
+
+  function cancelReject() {
+    setRejectingId(null);
+    setRejectReason('');
   }
 
   if (submissions.length === 0) {
@@ -95,6 +109,10 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
             <div>Submitted: {new Date(s.submitted_at).toLocaleDateString()}</div>
           </div>
 
+          {errorId === s.id && (
+            <p className="text-sm text-destructive">Action failed. Please try again.</p>
+          )}
+
           {s.verification_status === 'pending' && (
             <div className="flex items-center gap-2 pt-2 border-t border-border">
               {rejectingId === s.id ? (
@@ -117,7 +135,7 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
                   <RFDS.SemanticButton
                     variant="secondary"
                     size="sm"
-                    onClick={() => { setRejectingId(null); setRejectReason(''); }}
+                    onClick={cancelReject}
                   >
                     Cancel
                   </RFDS.SemanticButton>
@@ -135,7 +153,7 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
                   <RFDS.SemanticButton
                     variant="destructive"
                     size="sm"
-                    onClick={() => setRejectingId(s.id)}
+                    onClick={() => startReject(s.id)}
                     disabled={loadingId === s.id}
                   >
                     Reject

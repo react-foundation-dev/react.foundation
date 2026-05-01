@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     const now = new Date().toISOString();
     const submission: CommunitySubmission = {
-      id: `submission-${Date.now()}`,
+      id: `submission-${crypto.randomUUID()}`,
       name: body.name,
       address: body.address,
       city: body.city,

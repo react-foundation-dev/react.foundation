@@ -9,8 +9,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserManagementService } from '@/lib/admin/user-management-service';
-import { getSubmissionById, updateSubmission, deleteSubmission } from '@/lib/redis-community-submissions';
-import { addCommunity } from '@/lib/redis-communities';
+import { getSubmissionById } from '@/lib/redis-community-submissions';
+import { approveSubmissionAtomic } from '@/lib/redis-community-submissions';
 import type { Community } from '@/types/community';
 
 function slugify(name: string): string {
@@ -42,17 +42,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
     }
 
-    // Mark as approved
-    await updateSubmission(id, {
-      verification_status: 'approved',
-      reviewed_by: session.user.email,
-      reviewed_at: new Date().toISOString(),
-    });
-
-    // Convert to Community
     const now = new Date().toISOString();
+    const communityId = `community-${crypto.randomUUID()}`;
     const community: Community = {
-      id: `community-${Date.now()}`,
+      id: communityId,
       name: submission.name,
       slug: slugify(submission.name),
       city: submission.city,
@@ -62,7 +55,7 @@ export async function POST(request: NextRequest) {
       coordinates: submission.coordinates ?? { lat: 0, lng: 0 },
       organizers: [
         {
-          id: `org-${Date.now()}`,
+          id: `org-${crypto.randomUUID()}`,
           name: submission.organizer_name,
           role: 'Lead Organizer',
         },
@@ -79,18 +72,15 @@ export async function POST(request: NextRequest) {
       status: 'new',
       invite_only: false,
       verified: false,
-      verification_status: 'pending',
+      verification_status: 'verified',
       cois_tier: 'none',
       created_at: now,
       updated_at: now,
     };
 
-    await addCommunity(community);
+    await approveSubmissionAtomic(id, community);
 
-    // Remove from submissions queue
-    await deleteSubmission(id);
-
-    return NextResponse.json({ success: true, communityId: community.id });
+    return NextResponse.json({ success: true, communityId });
   } catch (error: unknown) {
     console.error('Error approving submission:', error);
     return NextResponse.json({ error: 'Failed to approve' }, { status: 500 });
