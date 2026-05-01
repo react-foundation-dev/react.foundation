@@ -5,9 +5,12 @@
 
 import { getRedisClient } from '@/lib/redis';
 import { getCommunities, migrateFromOldFormat } from '@/lib/redis-communities';
+import { getSubmissions } from '@/lib/redis-community-submissions';
+import type { CommunitySubmission } from '@/types/community-submission';
 import { RFDS } from '@/components/rfds';
 import { MigrationButton } from './migration-button';
 import { CommunitiesTable } from '@/components/admin/CommunitiesTable';
+import { PendingSubmissionsTable } from '@/components/admin/PendingSubmissionsTable';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,15 +43,24 @@ async function getCommunitiesData() {
     const countries = new Set(communities.map(c => c.country)).size;
     const totalMembers = communities.reduce((sum, c) => sum + (c.member_count || 0), 0);
 
+    let pendingSubmissions: CommunitySubmission[] = [];
+    try {
+      const submissions = await getSubmissions();
+      pendingSubmissions = submissions.filter(s => s.verification_status === 'pending');
+    } catch (error) {
+      console.error('Failed to fetch submissions:', error);
+    }
+
     return {
       communityKeys: communityKeys.length,
       totalCommunities: communities.length,
       activeCommunities,
       countries,
       totalMembers,
-      communities, // Include for display
+      communities,
       storageFormat,
       needsMigration: oldFormatExists && !indexExists,
+      pendingSubmissions,
     };
   } catch (error) {
     console.error('Error fetching communities data:', error);
@@ -114,6 +126,16 @@ export default async function CommunitiesPage() {
         </div>
       </div>
       
+      {/* Pending Submissions */}
+      {data.pendingSubmissions.length > 0 && (
+        <div className="bg-card border border-warning/50 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-foreground mb-4">
+            Pending Submissions ({data.pendingSubmissions.length})
+          </h3>
+          <PendingSubmissionsTable submissions={data.pendingSubmissions} />
+        </div>
+      )}
+
       {/* Communities Table */}
       {data.communities && data.communities.length > 0 && (
         <div className="bg-card border border-border rounded-xl p-6">
