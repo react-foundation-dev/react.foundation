@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       country: submission.country,
       region: submission.region,
       timezone: submission.timezone ?? 'UTC',
-      coordinates: submission.coordinates ?? { lat: 0, lng: 0 },
+      coordinates: submission.coordinates,
       organizers: [
         {
           id: `org-${crypto.randomUUID()}`,

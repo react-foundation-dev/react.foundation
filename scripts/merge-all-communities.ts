@@ -100,7 +100,7 @@ async function main() {
     const key = normalizeName(comm.name);
 
     // Fix coordinates if missing
-    if (comm.coordinates.lat === 0 || comm.coordinates.lng === 0) {
+    if (!comm.coordinates || comm.coordinates.lat === 0 || comm.coordinates.lng === 0) {
       const cityCoords = CITY_COORDINATES[comm.city] || CITY_COORDINATES[`${comm.city}, ${comm.country}`];
       if (cityCoords) {
         comm.coordinates = { lat: cityCoords.lat, lng: cityCoords.lng };

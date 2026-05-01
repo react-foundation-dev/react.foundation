@@ -42,7 +42,7 @@ const COORDS: Record<string, { lat: number; lng: number; region?: string }> = {
 // Fix coordinates
 let fixed = 0;
 const updated = REACT_COMMUNITIES.map(comm => {
-  if (comm.coordinates.lat === 0 && comm.coordinates.lng === 0) {
+  if (!comm.coordinates || (comm.coordinates.lat === 0 && comm.coordinates.lng === 0)) {
     const coords = COORDS[comm.city];
     if (coords) {
       fixed++;

@@ -13,7 +13,7 @@ export interface Community {
   country: string;
   region?: string; // State/Province
   timezone: string;
-  coordinates: {
+  coordinates?: {
     lat: number;
     lng: number;
   };
