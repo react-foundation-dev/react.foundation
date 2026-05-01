@@ -91,5 +91,9 @@
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "redwoodjs"
+  ],
+  "enableAllProjectMcpServers": true
 }
