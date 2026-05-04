@@ -1,8 +1,4 @@
-/**
- * Pending Community Submissions Table
- * Shows submissions awaiting admin review with approve/reject actions
- */
-
+// Admin table for reviewing pending community submissions
 'use client';
 
 import { useState } from 'react';
@@ -16,58 +12,58 @@ interface PendingSubmissionsTableProps {
 
 export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTableProps) {
   const router = useRouter();
-  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [approvingId, setApprovingId] = useState<string | null>(null);
+  const [rejectFormId, setRejectFormId] = useState<string | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
-  const [errorId, setErrorId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<{ id: string; message: string } | null>(null);
+
+  const isBusy = (id: string) => approvingId === id || rejectingId === id;
 
   async function handleApprove(id: string) {
-    setLoadingId(id);
-    setErrorId(null);
+    setApprovingId(id);
+    setErrorMsg(null);
     try {
       const res = await fetch('/api/admin/community-submissions/approve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
       });
-      if (!res.ok) throw new Error('Failed to approve');
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Failed to approve (${res.status})`);
+      }
       router.refresh();
-    } catch {
-      setErrorId(id);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Action failed';
+      setErrorMsg({ id, message });
     } finally {
-      setLoadingId(null);
+      setApprovingId(null);
     }
   }
 
   async function handleReject(id: string) {
-    setLoadingId(id);
-    setErrorId(null);
+    setRejectingId(id);
+    setErrorMsg(null);
     try {
       const res = await fetch('/api/admin/community-submissions/reject', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, reason: rejectReason }),
       });
-      if (!res.ok) throw new Error('Failed to reject');
-      setRejectingId(null);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Failed to reject (${res.status})`);
+      }
+      setRejectFormId(null);
       setRejectReason('');
       router.refresh();
-    } catch {
-      setErrorId(id);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Action failed';
+      setErrorMsg({ id, message });
     } finally {
-      setLoadingId(null);
+      setRejectingId(null);
     }
-  }
-
-  function startReject(id: string) {
-    setRejectingId(id);
-    setRejectReason('');
-    setErrorId(null);
-  }
-
-  function cancelReject() {
-    setRejectingId(null);
-    setRejectReason('');
   }
 
   if (submissions.length === 0) {
@@ -109,13 +105,13 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
             <div>Submitted: {new Date(s.submitted_at).toLocaleDateString()}</div>
           </div>
 
-          {errorId === s.id && (
-            <p className="text-sm text-destructive">Action failed. Please try again.</p>
+          {errorMsg?.id === s.id && (
+            <p className="text-sm text-destructive">{errorMsg.message}</p>
           )}
 
           {s.verification_status === 'pending' && (
             <div className="flex items-center gap-2 pt-2 border-t border-border">
-              {rejectingId === s.id ? (
+              {rejectFormId === s.id ? (
                 <div className="flex items-center gap-2 flex-1">
                   <input
                     type="text"
@@ -128,14 +124,15 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
                     variant="destructive"
                     size="sm"
                     onClick={() => handleReject(s.id)}
-                    disabled={loadingId === s.id}
+                    disabled={isBusy(s.id)}
                   >
-                    {loadingId === s.id ? 'Rejecting...' : 'Confirm'}
+                    {rejectingId === s.id ? 'Rejecting...' : 'Confirm'}
                   </RFDS.SemanticButton>
                   <RFDS.SemanticButton
                     variant="secondary"
                     size="sm"
-                    onClick={cancelReject}
+                    onClick={() => { setRejectFormId(null); setRejectReason(''); }}
+                    disabled={rejectingId === s.id}
                   >
                     Cancel
                   </RFDS.SemanticButton>
@@ -146,15 +143,15 @@ export function PendingSubmissionsTable({ submissions }: PendingSubmissionsTable
                     variant="primary"
                     size="sm"
                     onClick={() => handleApprove(s.id)}
-                    disabled={loadingId === s.id}
+                    disabled={isBusy(s.id)}
                   >
-                    {loadingId === s.id ? 'Approving...' : 'Approve'}
+                    {approvingId === s.id ? 'Approving...' : 'Approve'}
                   </RFDS.SemanticButton>
                   <RFDS.SemanticButton
                     variant="destructive"
                     size="sm"
-                    onClick={() => startReject(s.id)}
-                    disabled={loadingId === s.id}
+                    onClick={() => { setRejectFormId(s.id); setRejectReason(''); setErrorMsg(null); }}
+                    disabled={isBusy(s.id)}
                   >
                     Reject
                   </RFDS.SemanticButton>

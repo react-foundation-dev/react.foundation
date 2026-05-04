@@ -1,0 +1,39 @@
+name: Content Update
+description: Request a correction or improvement to site content
+title: "Content: <short description>"
+labels: ["type:content", "status:needs-info"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Content Location
+      description: Link to the page, file, or section that should change.
+      placeholder: https://react.foundation/...
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Content
+      placeholder: What does it say now?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed Content
+      placeholder: What should it say instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why This Matters
+      placeholder: Accuracy, clarity, missing context, broken link, outdated information, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Optional. Anything this content update should not change.

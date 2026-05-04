@@ -1,0 +1,64 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "Bug: <short description>"
+labels: ["type:bug", "status:needs-info"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide a clear and complete description.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Go to...
+        2. Click...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      placeholder: What actually happened?
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Browser, OS, etc.
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      placeholder: Screenshots, logs, etc.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Optional. Maintainers may refine this before implementation.
+      placeholder: |
+        - ...
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Optional. Anything this issue should not change.
+      placeholder: |
+        - ...
