@@ -6,6 +6,12 @@ import Link from 'next/link';
 import type { Community } from '@/types/community';
 import type * as Leaflet from 'leaflet';
 import useSWR from 'swr';
+import {
+  getCommunityPath,
+  getTierBadgeColor,
+  getTierColorHex,
+  getTierIcon,
+} from './community-map-utils';
 
 // Fetcher for SWR
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -357,7 +363,7 @@ export function CommunityMap() {
 
                   <div className="flex gap-2">
                     <Link
-                      href={`/communities/${community.slug}`}
+                      href={getCommunityPath(community.slug)}
                       className="flex-1 text-center rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:opacity-90 cursor-pointer"
                       style={{
                         backgroundColor: 'hsl(var(--primary))',
@@ -394,60 +400,6 @@ export function CommunityMap() {
   );
 }
 
-function getTierColorHex(tier?: string, status?: string): string {
-  // Inactive/paused communities get gray
-  if (status === 'inactive' || status === 'paused') {
-    return '#6b7280'; // gray-500
-  }
-
-  switch (tier) {
-    case 'platinum':
-      return '#22d3ee'; // cyan-400
-    case 'gold':
-      return '#facc15'; // yellow-400
-    case 'silver':
-      return '#9ca3af'; // gray-400
-    case 'bronze':
-      return '#fb923c'; // orange-400
-    default:
-      return '#3b82f6'; // blue-500 for active without tier
-  }
-}
-
-function getTierBadgeColor(tier: string): string {
-  switch (tier) {
-    case 'platinum':
-      return 'bg-gradient-to-r from-cyan-400 to-blue-400';
-    case 'gold':
-      return 'bg-gradient-to-r from-yellow-400 to-orange-400';
-    case 'silver':
-      return 'bg-gradient-to-r from-gray-300 to-gray-400';
-    case 'bronze':
-      return 'bg-gradient-to-r from-orange-300 to-orange-400';
-    default:
-      return 'bg-primary';
-  }
-}
-
-function getTierIcon(tier: string, status?: string): string {
-  // Different icons for inactive/paused
-  if (status === 'inactive') return '⏸';
-  if (status === 'paused') return '⏸';
-  if (status === 'new') return '✨';
-
-  switch (tier) {
-    case 'platinum':
-      return '💎';
-    case 'gold':
-      return '🏆';
-    case 'silver':
-      return '🥈';
-    case 'bronze':
-      return '🥉';
-    default:
-      return '📍';
-  }
-}
 
 function TierLegend({ tier }: { tier: string }) {
   return (
