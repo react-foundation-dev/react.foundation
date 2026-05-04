@@ -1,17 +1,10 @@
-/**
- * Redis Community Submission Storage
- * Stores pending community submissions for admin review
- *
- * Storage:
- * - Individual submissions: community_submissions:{id} (JSON)
- * - Index set: community_submissions:index (Redis SET of all IDs)
- */
-
+// Redis storage for pending community submissions (admin review queue)
 import type { CommunitySubmission } from '@/types/community-submission';
 import type { Community } from '@/types/community';
 
 const SUBMISSIONS_INDEX_KEY = 'community_submissions:index';
 const SUBMISSION_KEY_PREFIX = 'community_submissions:';
+type RedisExecResult = Array<[Error | null, unknown]>;
 
 function getSubmissionKey(id: string): string {
   return `${SUBMISSION_KEY_PREFIX}${id}`;
@@ -27,6 +20,19 @@ async function getRedis() {
   }
 }
 
+function assertRedisExecSucceeded(results: RedisExecResult | null, operation: string): RedisExecResult {
+  if (!results) {
+    throw new Error(`Redis transaction aborted while trying to ${operation}`);
+  }
+
+  const failed = results.find(([error]) => error !== null);
+  if (failed?.[0]) {
+    throw failed[0];
+  }
+
+  return results;
+}
+
 export async function saveSubmission(submission: CommunitySubmission): Promise<void> {
   const redis = await getRedis();
   if (!redis) throw new Error('Redis not available');
@@ -34,7 +40,7 @@ export async function saveSubmission(submission: CommunitySubmission): Promise<v
   const pipeline = redis.pipeline();
   pipeline.set(getSubmissionKey(submission.id), JSON.stringify(submission));
   pipeline.sadd(SUBMISSIONS_INDEX_KEY, submission.id);
-  await pipeline.exec();
+  assertRedisExecSucceeded(await pipeline.exec(), 'save submission');
 }
 
 export async function getSubmissions(): Promise<CommunitySubmission[]> {
@@ -47,12 +53,19 @@ export async function getSubmissions(): Promise<CommunitySubmission[]> {
   const keys = ids.map(id => getSubmissionKey(id));
   const pipeline = redis.pipeline();
   keys.forEach(k => pipeline.get(k));
-  const results = await pipeline.exec();
-  const values = results?.map(([, v]) => v as string | null) ?? [];
+  const results = assertRedisExecSucceeded(await pipeline.exec(), 'load submissions');
+  const values = results.map(([, v]) => v as string | null);
 
   return values
     .filter((v): v is string => v !== null)
-    .map(v => JSON.parse(v) as CommunitySubmission)
+    .reduce<CommunitySubmission[]>((acc, v) => {
+      try {
+        acc.push(JSON.parse(v) as CommunitySubmission);
+      } catch {
+        console.error('Skipping malformed submission record in Redis');
+      }
+      return acc;
+    }, [])
     .sort((a, b) => b.submitted_at.localeCompare(a.submitted_at));
 }
 
@@ -93,18 +106,15 @@ export async function updateSubmission(
     updated_at: new Date().toISOString(),
   };
 
-  const result = await redis.multi().set(key, JSON.stringify(updated)).exec();
-  if (!result) {
-    throw new Error(`Concurrent modification on submission ${id}, retry`);
-  }
+  assertRedisExecSucceeded(
+    await redis.multi().set(key, JSON.stringify(updated)).exec(),
+    `update submission ${id}`
+  );
 
   return updated;
 }
 
-/**
- * Atomically add community to Redis + remove submission from queue.
- * Uses MULTI/EXEC transaction so all ops succeed or none do.
- */
+// Atomically add community to Redis + remove submission from queue
 export async function approveSubmissionAtomic(
   submissionId: string,
   community: Community
@@ -121,16 +131,15 @@ export async function approveSubmissionAtomic(
     throw new Error('Submission already processed');
   }
 
-  const result = await redis.multi()
-    .set(`communities:${community.id}`, JSON.stringify(community))
-    .sadd('communities:index', community.id)
-    .del(submissionKey)
-    .srem(SUBMISSIONS_INDEX_KEY, submissionId)
-    .exec();
-
-  if (!result) {
-    throw new Error('Concurrent approval detected');
-  }
+  assertRedisExecSucceeded(
+    await redis.multi()
+      .set(`communities:${community.id}`, JSON.stringify(community))
+      .sadd('communities:index', community.id)
+      .del(submissionKey)
+      .srem(SUBMISSIONS_INDEX_KEY, submissionId)
+      .exec(),
+    `approve submission ${submissionId}`
+  );
 }
 
 export async function deleteSubmission(id: string): Promise<void> {
@@ -140,5 +149,5 @@ export async function deleteSubmission(id: string): Promise<void> {
   const pipeline = redis.pipeline();
   pipeline.del(getSubmissionKey(id));
   pipeline.srem(SUBMISSIONS_INDEX_KEY, id);
-  await pipeline.exec();
+  assertRedisExecSucceeded(await pipeline.exec(), `delete submission ${id}`);
 }

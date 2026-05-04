@@ -1,8 +1,4 @@
-/**
- * Community Submission API
- * POST /api/communities/submit - Submit a new community for review
- */
-
+// POST /api/communities/submit — public endpoint for community submissions
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';

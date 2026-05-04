@@ -1,16 +1,30 @@
-/**
- * Approve Community Submission API
- * POST /api/admin/community-submissions/approve
- *
- * Converts a pending submission into a full Community in Redis.
- */
-
+// POST /api/admin/community-submissions/approve — convert submission to Community
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserManagementService } from '@/lib/admin/user-management-service';
 import { getSubmissionById, approveSubmissionAtomic } from '@/lib/redis-community-submissions';
 import type { Community } from '@/types/community';
+
+const SUBMISSION_ID_RE = /^submission-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function approvalErrorResponse(error: unknown) {
+  const message = error instanceof Error ? error.message : '';
+
+  if (message.includes('already processed')) {
+    return NextResponse.json({ error: 'Submission already processed' }, { status: 409 });
+  }
+
+  if (message.includes('transaction aborted')) {
+    return NextResponse.json({ error: 'Concurrent approval detected' }, { status: 409 });
+  }
+
+  if (message.includes('Could not generate slug')) {
+    return NextResponse.json({ error: 'Invalid community name' }, { status: 400 });
+  }
+
+  return NextResponse.json({ error: 'Failed to approve submission' }, { status: 500 });
+}
 
 function slugify(name: string): string {
   const slug = name
@@ -34,8 +48,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { id } = await request.json();
-    if (!id) {
-      return NextResponse.json({ error: 'Submission ID required' }, { status: 400 });
+    if (!id || typeof id !== 'string' || !SUBMISSION_ID_RE.test(id)) {
+      return NextResponse.json({ error: 'Invalid submission ID' }, { status: 400 });
     }
 
     const submission = await getSubmissionById(id);
@@ -75,6 +89,8 @@ export async function POST(request: NextRequest) {
       verified: true,
       verification_status: 'verified',
       cois_tier: 'none',
+      approved_by: session.user.email,
+      approved_at: now,
       created_at: now,
       updated_at: now,
     };
@@ -83,9 +99,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, communityId });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to approve';
-    const status = message.includes('Concurrent') || message.includes('already processed') ? 409 : 500;
     console.error('Error approving submission:', error);
-    return NextResponse.json({ error: message }, { status });
+    return approvalErrorResponse(error);
   }
 }

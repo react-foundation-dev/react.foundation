@@ -1,8 +1,4 @@
-/**
- * Admin Data Communities Page
- * Shows community data and management
- */
-
+// Admin communities page — stats, pending submissions, community list
 import { getRedisClient } from '@/lib/redis';
 import { getCommunities, migrateFromOldFormat } from '@/lib/redis-communities';
 import { getSubmissions } from '@/lib/redis-community-submissions';
