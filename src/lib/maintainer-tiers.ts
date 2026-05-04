@@ -48,7 +48,7 @@ export type ContributionStats = {
 };
 
 export const ecosystemLibraries: RepoTarget[] = [
-  // Core React (9 repos)
+  // Core React (10 repos)
   { owner: "facebook", name: "react", category: "core", tier: 1 }, // Includes React Compiler (in /compiler subdirectory)
   { owner: "facebook", name: "relay", category: "data", tier: 1 },
   { owner: "facebook", name: "jest", category: "testing", tier: 1 },
@@ -57,6 +57,7 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "reactjs", name: "react.dev", category: "core", tier: 1, hasNpmPackage: false }, // Documentation website (not a library)
   { owner: "reactjs", name: "rfcs", category: "core", tier: 1, hasNpmPackage: false }, // RFC repository (not a library)
   { owner: "react-native-community", name: "react-native-releases", category: "core", tier: 2, hasNpmPackage: false }, // Release notes repository (not a library)
+  { owner: "invertase", name: "react-native-firebase", category: "core", tier: 2 },
   { owner: "react-navigation", name: "react-navigation", category: "routing", tier: 1 },
 
   // State Management (6 repos)
@@ -99,13 +100,14 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "microsoft", name: "playwright", category: "testing", tier: 1 },
   { owner: "testing-library", name: "react-hooks-testing-library", category: "testing", tier: 2 },
 
-  // UI/Component Libraries (6 repos)
+  // UI/Component Libraries (7 repos)
   { owner: "radix-ui", name: "primitives", category: "ui", tier: 1 },
   { owner: "tailwindlabs", name: "headlessui", category: "ui", tier: 1 },
   { owner: "adobe", name: "react-spectrum", category: "ui", tier: 2 },
   { owner: "ariakit", name: "ariakit", category: "ui", tier: 2 },
   { owner: "mui", name: "material-ui", category: "ui", tier: 1 },
   { owner: "chakra-ui", name: "chakra-ui", category: "ui", tier: 2 },
+  { owner: "ant-design", name: "ant-design", category: "ui", tier: 1 },
 
   // Animation (3 repos)
   { owner: "framer", name: "motion", category: "animation", tier: 1 },

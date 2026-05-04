@@ -1,12 +1,12 @@
 # React Ecosystem Libraries Tracking
 
-This document outlines the 54 React ecosystem libraries tracked for contributor recognition and tier progression in the React Foundation Store.
+This document outlines the 58 React ecosystem libraries tracked for contributor recognition and tier progression in the React Foundation Store.
 
 ## Overview
 
-We track contributions across **54 carefully curated repositories** that represent the most impactful and widely-used libraries in the React ecosystem. These libraries span multiple categories from core React infrastructure to popular community tools.
+We track contributions across **58 carefully curated repositories** that represent the most impactful and widely-used libraries in the React ecosystem. These libraries span multiple categories from core React infrastructure to popular community tools.
 
-**Last Updated:** October 2025 (verified current for 2025)
+**Last Updated:** May 2026 (verified current for 2026)
 
 **Scoring Model:**
 - Pull Requests Opened: **8 points**
@@ -23,7 +23,7 @@ We track contributions across **54 carefully curated repositories** that represe
 
 ## Tier System
 
-With 54 tracked libraries, tier thresholds have been calibrated to recognize meaningful ecosystem contributions:
+With 58 tracked libraries, tier thresholds have been calibrated to recognize meaningful ecosystem contributions:
 
 | Tier | Min Score | Description |
 |------|-----------|-------------|
@@ -31,9 +31,9 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 | **Sustainer Access** | 120 | Sustained engagement across multiple libraries (~15 merged PRs) |
 | **Core Ally Access** | 250 | Top-tier maintainers who are pillars of the ecosystem (~30+ merged PRs) |
 
-## Tracked Libraries (54 Total)
+## Tracked Libraries (58 Total)
 
-### Core React & React Native (9 repositories)
+### Core React & React Native (10 repositories)
 **Tier 1 (Critical Infrastructure):**
 - `facebook/react` - The React core library (includes React Compiler in `/compiler` subdirectory)
 - `facebook/react-native` - Native mobile development with React
@@ -48,6 +48,7 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 
 **Tier 2:**
 - `react-native-community/react-native-releases` - React Native release coordination
+- `invertase/react-native-firebase` - React Native Firebase integrations for production mobile apps
 
 ---
 
@@ -127,11 +128,12 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 
 ---
 
-### UI/Component Libraries (6 repositories)
+### UI/Component Libraries (7 repositories)
 **Tier 1 (Widely Used):**
 - `radix-ui/primitives` - Unstyled, accessible components
 - `tailwindlabs/headlessui` - Unstyled UI components
 - `mui/material-ui` - Material Design components
+- `ant-design/ant-design` - Enterprise-grade React UI component library
 
 **Tier 2:**
 - `adobe/react-spectrum` - Adobe's design system
@@ -170,12 +172,16 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 
 ---
 
-### Styling (2 repositories)
+### Styling (4 repositories)
 **Tier 1:**
 - `styled-components/styled-components` - **NEW 2025** - CSS-in-JS library (2.6M+ weekly downloads, in maintenance mode but widely used)
 - `emotion-js/emotion` - **NEW 2025** - CSS-in-JS library with performance optimizations
+- `tailwindlabs/tailwindcss` - Utility-first CSS framework widely used with React
 
-**Note:** While runtime CSS-in-JS has declined in popularity for new projects (due to build-time solutions like Tailwind CSS), both libraries remain widely used in existing production applications.
+**Tier 2:**
+- `marklawlor/nativewind` - Tailwind-style styling for React Native and Expo apps
+
+**Note:** While runtime CSS-in-JS has declined in popularity for new projects, these libraries and styling toolchains remain widely used in production React and React Native applications.
 
 ---
 
@@ -194,7 +200,7 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 | **Animation** | Motion and animation libraries | Framer Motion, React Spring |
 | **Tooling** | Build tools, bundlers, and developer tools | Storybook, Vite, React DevTools |
 | **Tables** | Data grid and table libraries | TanStack Table |
-| **Styling** | CSS-in-JS and styling solutions | styled-components, Emotion |
+| **Styling** | CSS-in-JS, utility CSS, and React Native styling solutions | styled-components, Emotion, Tailwind CSS, NativeWind |
 
 ## Selection Criteria
 
@@ -211,7 +217,7 @@ Libraries are included based on:
 Contributions are tracked via GitHub GraphQL API for the past 12 months:
 
 1. **Pull Requests Opened** (8 points each):
-   - PRs you **created** in any of the 53 tracked repositories
+   - PRs you **created** in any of the 58 tracked repositories
    - Includes features, bug fixes, refactors, and documentation PRs
    - ❌ **Does NOT include:** PR reviews, review comments, or approvals
 
@@ -289,7 +295,7 @@ This helps visualize your specialization within the ecosystem.
 ## FAQ
 
 **Q: Why isn't [my favorite library] tracked?**
-A: We limit tracking to 50 libraries to maintain focus. Submit a proposal if you believe it meets our criteria!
+A: We keep the tracked set curated to maintain focus. Submit a proposal if you believe it meets our criteria!
 
 **Q: Do contributions to forks count?**
 A: No, only contributions to the official repositories listed above.
@@ -304,6 +310,12 @@ A: Yes! The "Category Breakdown" section shows your activity across all categori
 A: No, only merged PRs are counted in the scoring system.
 
 ## Changelog
+
+**2026-05-04**: Updated to 58 libraries after community proposals
+- **ADDED:** Ant Design (enterprise-grade React UI component library) - categorized as UI
+- **ADDED:** React Native Firebase (Firebase integrations for React Native apps) - categorized as Core React & React Native
+- **DOCUMENTED:** Tailwind CSS and NativeWind, which were already tracked in code under Styling
+- Reconciled documented totals with the runtime library list
 
 **2025-10-17**: Updated to 54 libraries (2025-current verification)
 - **REMOVED:** Recoil (archived by Meta on Jan 1, 2025)
@@ -334,4 +346,4 @@ A: No, only merged PRs are counted in the scoring system.
 
 ---
 
-*This document is maintained by the React Foundation Store team. Last updated: October 17, 2025.*
+*This document is maintained by the React Foundation Store team. Last updated: May 4, 2026.*
