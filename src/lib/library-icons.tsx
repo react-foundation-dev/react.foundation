@@ -30,6 +30,8 @@ import {
   SiTrpc,
   SiVercel,
   SiReacthookform,
+  SiAntdesign,
+  SiFirebase,
 } from "@icons-pack/react-simple-icons";
 
 // Simple Icons doesn't have all libraries, so we'll use fallback for missing ones
@@ -62,6 +64,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   "apollo-client": SiApollographql,
   trpc: SiTrpc,
   urql: SiGraphql, // urql uses GraphQL
+  "react-native-firebase": SiFirebase,
 
   // Routing
   "react-router": SiReactrouter,
@@ -95,6 +98,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   ariakit: null,
   "material-ui": SiMui,
   "chakra-ui": SiChakraui,
+  "ant-design": SiAntdesign,
 
   // Animation
   motion: SiFramer,
@@ -140,6 +144,7 @@ export const libraryDisplayNames: Record<string, string> = {
   "apollo-client": "Apollo Client",
   trpc: "tRPC",
   urql: "urql",
+  "react-native-firebase": "React Native Firebase",
   "react-router": "React Router",
   router: "TanStack Router",
   wouter: "Wouter",
@@ -163,6 +168,7 @@ export const libraryDisplayNames: Record<string, string> = {
   ariakit: "Ariakit",
   "material-ui": "Material UI",
   "chakra-ui": "Chakra UI",
+  "ant-design": "Ant Design",
   motion: "Framer Motion",
   "react-spring": "React Spring",
   "auto-animate": "AutoAnimate",
