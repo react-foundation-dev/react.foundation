@@ -1,12 +1,14 @@
 ## Summary
 
-Describe what this PR does and why.
+Describe what changed and why this change is needed.
 
 ---
 
-## Linked Issue
+## Linked Issue or Exception
 
 Closes #
+
+If there is no linked issue, explain why this PR does not need one.
 
 ---
 
@@ -22,12 +24,21 @@ What changed and why this approach was chosen.
 
 ---
 
+## Scope
+
+- [ ] This PR has a single concern
+- [ ] Refactors are directly required for this change
+- [ ] No unrelated formatting or cleanup is included
+
+---
+
 ## Test Plan
 
-- [ ] Added failing tests
-- [ ] Implemented fix
-- [ ] Tests now pass
-- [ ] Regression tested
+- [ ] Added or updated tests for the changed behavior
+- [ ] Confirmed the test fails without the fix, when practical
+- [ ] Verified tests pass with the fix
+- [ ] Regression tested the original scenario
+- [ ] Manually verified UI behavior if applicable
 
 Describe specific scenarios tested:
 
@@ -41,11 +52,11 @@ Add before/after if applicable.
 
 ## Checklist
 
-- [ ] PR is focused (single concern)
 - [ ] Code follows existing patterns
 - [ ] No unnecessary abstractions
 - [ ] Tests included and passing
 - [ ] No console logs or debug code
+- [ ] No unresolved TODOs introduced
 - [ ] CI passing
 
 ---

@@ -48,3 +48,17 @@ body:
     attributes:
       label: Additional Context
       placeholder: Screenshots, logs, etc.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Optional. Maintainers may refine this before implementation.
+      placeholder: |
+        - ...
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Optional. Anything this issue should not change.
+      placeholder: |
+        - ...

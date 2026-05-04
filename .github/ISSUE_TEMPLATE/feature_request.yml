@@ -26,3 +26,15 @@ body:
     id: additional
     attributes:
       label: Additional Context
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Optional draft. Maintainers may refine this before implementation.
+      placeholder: |
+        - ...
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Optional. Anything this request should not include.
