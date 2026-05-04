@@ -67,12 +67,13 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "pmndrs", name: "valtio", category: "state", tier: 2 },
   { owner: "statelyai", name: "xstate", category: "state", tier: 2 },
 
-  // Data Fetching (5 repos)
+  // Data Fetching (6 repos)
   { owner: "TanStack", name: "query", category: "data", tier: 1 },
   { owner: "vercel", name: "swr", category: "data", tier: 1 },
   { owner: "apollographql", name: "apollo-client", category: "data", tier: 1 },
   { owner: "trpc", name: "trpc", category: "data", tier: 2 },
   { owner: "urql-graphql", name: "urql", category: "data", tier: 2 },
+  { owner: "invertase", name: "react-native-firebase", category: "data", tier: 2 },
 
   // Routing (3 repos)
   { owner: "remix-run", name: "react-router", category: "routing", tier: 1 },
@@ -99,13 +100,14 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "microsoft", name: "playwright", category: "testing", tier: 1 },
   { owner: "testing-library", name: "react-hooks-testing-library", category: "testing", tier: 2 },
 
-  // UI/Component Libraries (6 repos)
+  // UI/Component Libraries (7 repos)
   { owner: "radix-ui", name: "primitives", category: "ui", tier: 1 },
   { owner: "tailwindlabs", name: "headlessui", category: "ui", tier: 1 },
   { owner: "adobe", name: "react-spectrum", category: "ui", tier: 2 },
   { owner: "ariakit", name: "ariakit", category: "ui", tier: 2 },
   { owner: "mui", name: "material-ui", category: "ui", tier: 1 },
   { owner: "chakra-ui", name: "chakra-ui", category: "ui", tier: 2 },
+  { owner: "ant-design", name: "ant-design", category: "ui", tier: 1 },
 
   // Animation (3 repos)
   { owner: "framer", name: "motion", category: "animation", tier: 1 },
