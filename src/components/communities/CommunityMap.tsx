@@ -1,13 +1,9 @@
-/**
- * Community Map Component
- * Interactive Leaflet map showing React communities worldwide
- */
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import type { Community } from '@/types/community';
+import type * as Leaflet from 'leaflet';
 import useSWR from 'swr';
 
 // Fetcher for SWR
@@ -156,7 +152,7 @@ const FALLBACK_COMMUNITIES: Community[] = [
 
 export function CommunityMap() {
   const [isClient, setIsClient] = useState(false);
-  const [L, setL] = useState<any>(null);
+  const [L, setL] = useState<typeof Leaflet | null>(null);
 
   // Fetch communities from API
   const { data, error, isLoading } = useSWR(
@@ -171,16 +167,16 @@ export function CommunityMap() {
   const communities: Community[] = data?.communities || FALLBACK_COMMUNITIES;
 
   useEffect(() => {
-    console.log('🗺️ CommunityMap: Component mounted');
-    console.log('🗺️ Communities loaded:', communities.length);
-
     // Load Leaflet
     if (typeof window !== 'undefined') {
       import('leaflet').then((LeafletModule) => {
         const LeafletLib = LeafletModule.default;
+        type IconDefaultPrototype = typeof LeafletLib.Icon.Default.prototype & {
+          _getIconUrl?: unknown;
+        };
 
         // Fix default marker icon issue in Next.js
-        delete (LeafletLib.Icon.Default.prototype as any)._getIconUrl;
+        delete (LeafletLib.Icon.Default.prototype as IconDefaultPrototype)._getIconUrl;
         LeafletLib.Icon.Default.mergeOptions({
           iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
           iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -284,13 +280,15 @@ export function CommunityMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {communities.filter((c) => c.coordinates).map((community) => {
+        {communities
+          .filter((c): c is Community & { coordinates: NonNullable<Community['coordinates']> } => !!c.coordinates)
+          .map((community) => {
           const iconOptions = createCustomIcon(community.cois_tier, community.status);
 
           return (
             <Marker
               key={community.id}
-              position={[community.coordinates!.lat, community.coordinates!.lng]}
+              position={[community.coordinates.lat, community.coordinates.lng]}
               icon={
                 iconOptions && L
                   ? L.divIcon(iconOptions)

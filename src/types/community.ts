@@ -1,8 +1,3 @@
-/**
- * Community Types
- * For React community finder and organizer profiles
- */
-
 export interface Community {
   id: string;
   name: string;
@@ -50,6 +45,10 @@ export interface Community {
   cois_tier?: 'platinum' | 'gold' | 'silver' | 'bronze' | 'none';
   cois_score?: number;
   last_event_date?: string;
+
+  // Audit trail
+  approved_by?: string;
+  approved_at?: string;
 
   // Metadata
   created_at: string;

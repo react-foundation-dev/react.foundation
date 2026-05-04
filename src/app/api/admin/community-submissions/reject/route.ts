@@ -1,13 +1,21 @@
-/**
- * Reject Community Submission API
- * POST /api/admin/community-submissions/reject
- */
-
+// POST /api/admin/community-submissions/reject
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserManagementService } from '@/lib/admin/user-management-service';
 import { getSubmissionById, updateSubmission } from '@/lib/redis-community-submissions';
+
+const SUBMISSION_ID_RE = /^submission-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function rejectionErrorResponse(error: unknown) {
+  const message = error instanceof Error ? error.message : '';
+
+  if (message.includes('transaction aborted')) {
+    return NextResponse.json({ error: 'Concurrent rejection detected' }, { status: 409 });
+  }
+
+  return NextResponse.json({ error: 'Failed to reject submission' }, { status: 500 });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,8 +30,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { id, reason } = await request.json();
-    if (!id) {
-      return NextResponse.json({ error: 'Submission ID required' }, { status: 400 });
+    if (!id || typeof id !== 'string' || !SUBMISSION_ID_RE.test(id)) {
+      return NextResponse.json({ error: 'Invalid submission ID' }, { status: 400 });
     }
 
     const submission = await getSubmissionById(id);
@@ -41,6 +49,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     console.error('Error rejecting submission:', error);
-    return NextResponse.json({ error: 'Failed to reject' }, { status: 500 });
+    return rejectionErrorResponse(error);
   }
 }

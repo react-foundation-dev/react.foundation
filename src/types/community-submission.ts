@@ -1,8 +1,3 @@
-/**
- * Community Submission Types
- * For pending community submissions awaiting verification
- */
-
 export interface CommunitySubmission {
   id: string;
 
