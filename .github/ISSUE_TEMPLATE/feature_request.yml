@@ -1,0 +1,28 @@
+name: Feature Request
+description: Suggest an improvement or new feature
+title: "Feature: <short description>"
+labels: ["type:feature", "status:needs-info"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      placeholder: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      placeholder: What should happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      placeholder: Other approaches?
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
