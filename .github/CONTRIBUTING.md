@@ -39,7 +39,9 @@ npm run build
 ### 1. Pick or Create an Issue
 
 - Check existing issues first
-- If creating a new one, use the issue template
+- If creating a new one, use the closest matching issue template
+- Use the content template for corrections to copy, links, or site information
+- Include enough detail for maintainers to finalize acceptance criteria and a test plan
 
 ### 2. Branching
 
@@ -51,12 +53,13 @@ Use `feature/<issue-id>-short-description` for feature work and `docs/<issue-id>
 
 ### 3. Test-First Development (Required)
 
-Before writing code:
+For behavior changes, write tests before implementation:
 
-1. Write tests that reproduce the issue
-2. Ensure tests fail
-3. Implement the fix incrementally
-4. Ensure all tests pass
+1. Reproduce the issue or define the new expected behavior
+2. Add a test that captures that behavior
+3. Confirm the test fails before the fix when practical
+4. Implement the smallest change that passes the test
+5. Refactor only after the test passes
 
 ### 4. Code Standards
 
@@ -78,6 +81,7 @@ Fix: resolve map popup navigation bug (#47)
 Every PR must:
 
 - Link to an issue
+- Explain why no issue is needed when there is no linked issue
 - Include a clear summary
 - Include a test plan
 - Add or update tests
@@ -96,6 +100,9 @@ PRs are evaluated on:
 
 We may request changes even for working code if it does not meet standards.
 
+Maintainers follow the detailed issue triage and PR review workflow in
+[`.github/MAINTAINER_WORKFLOWS.md`](./MAINTAINER_WORKFLOWS.md).
+
 ---
 
 ## Labels
@@ -106,8 +113,9 @@ We use structured labels:
 - `type:feature`
 - `type:content`
 - `type:ecosystem`
-- `priority:P0`-`priority:P3`
-- `status:*`
+- `priority:P0` through `priority:P3`
+- `status:needs-info`, `status:ready`, `status:blocked`, `status:in-progress`
+- `good-first-issue`
 
 ---
 

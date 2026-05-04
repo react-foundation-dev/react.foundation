@@ -2,6 +2,10 @@
 
 Internal reference for the structured labels used by this repository.
 
+Apply exactly one `type:*` label to each issue. Apply one `priority:*` label
+once impact is understood. Keep one `status:*` label current as the issue moves
+through triage and implementation.
+
 ```text
 type:bug
 type:feature
@@ -15,4 +19,5 @@ status:needs-info
 status:ready
 status:blocked
 status:in-progress
+good-first-issue
 ```
