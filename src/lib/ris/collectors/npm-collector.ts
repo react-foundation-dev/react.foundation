@@ -200,6 +200,7 @@ export class NPMCollector {
       'remix-run/remix': '@remix-run/react',
       'molefrog/wouter': 'wouter',
       'gatsbyjs/gatsby': 'gatsby',
+      'facebook/docusaurus': '@docusaurus/core',
       'withastro/astro': 'astro',
       'expo/expo': 'expo',
       'react-hook-form/react-hook-form': 'react-hook-form',

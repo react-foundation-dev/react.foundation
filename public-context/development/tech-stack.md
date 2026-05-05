@@ -79,7 +79,7 @@ The React Foundation platform is built with modern web technologies, combining a
 **GitHub APIs**
 - GraphQL API for contribution tracking
 - REST API for user data
-- Tracks 54 React ecosystem libraries
+- Tracks 55 React ecosystem libraries
 - Automatic metric collection
 
 **Redis (Upstash)**

@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
+import { libraryDisplayNames } from './library-icons';
 import { ecosystemLibraries } from './maintainer-tiers';
+import { LibrariesLoader } from './ingest/loaders/libraries';
 import { NPMCollector } from './ris/collectors/npm-collector';
+import { PROBE_REPOS } from './ris/data/probe-repos';
 
 function findLibrary(owner: string, name: string) {
   return ecosystemLibraries.find((library) => library.owner === owner && library.name === name);
@@ -17,6 +20,10 @@ describe('ecosystemLibraries', () => {
       category: 'data',
       tier: 2,
     });
+    expect(findLibrary('facebook', 'docusaurus')).toMatchObject({
+      category: 'framework',
+      tier: 2,
+    });
   });
 
   it('does not contain duplicate repository targets', () => {
@@ -29,6 +36,28 @@ describe('ecosystemLibraries', () => {
     expect(NPMCollector.getPackageName('ant-design', 'ant-design')).toBe('antd');
     expect(NPMCollector.getPackageName('invertase', 'react-native-firebase')).toBe(
       '@react-native-firebase/app'
+    );
+    expect(NPMCollector.getPackageName('facebook', 'docusaurus')).toBe('@docusaurus/core');
+  });
+
+  it('includes Docusaurus in related library datasets', async () => {
+    expect(libraryDisplayNames.docusaurus).toBe('Docusaurus');
+
+    expect(PROBE_REPOS).toContainEqual(
+      expect.objectContaining({
+        owner: 'facebook',
+        repo: 'docusaurus',
+        category: 'framework',
+      })
+    );
+
+    const loader = new LibrariesLoader();
+    const records = await loader.load();
+    expect(records).toContainEqual(
+      expect.objectContaining({
+        id: 'library-facebook-docusaurus',
+        title: 'Docusaurus',
+      })
     );
   });
 });

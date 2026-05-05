@@ -78,12 +78,12 @@ Yes, but smoothing prevents dramatic drops:
 
 ### Which libraries are tracked for RIS?
 
-54 React ecosystem libraries including:
+55 React ecosystem libraries including:
 - Core: React, React DOM
 - Routing: React Router, TanStack Router
 - State: Redux, Zustand, Jotai, Recoil
 - Data: TanStack Query, SWR, Apollo Client
-- Frameworks: Next.js, Remix, Gatsby
+- Frameworks: Next.js, Remix, Gatsby, Docusaurus
 - UI: Material-UI, Chakra UI, Radix
 - ...and 40+ more
 
@@ -91,7 +91,7 @@ Yes, but smoothing prevents dramatic drops:
 
 ### How do I get my library tracked?
 
-Currently, the 54 libraries are pre-selected based on ecosystem importance. New libraries may be added:
+Currently, the 55 libraries are pre-selected based on ecosystem importance. New libraries may be added:
 - Annual review of ecosystem landscape
 - Community nomination process
 - Board approval required

@@ -4,7 +4,7 @@
 
 ## Overview
 
-The React Foundation tracks contributions to 54 React ecosystem libraries via GitHub integration. Contributors earn points and unlock exclusive store access based on their activity.
+The React Foundation tracks contributions to 55 React ecosystem libraries via GitHub integration. Contributors earn points and unlock exclusive store access based on their activity.
 
 **This is separate from RIS** - RIS rewards library maintainers with revenue, while contributor tracking rewards individual developers with store access.
 
@@ -20,7 +20,7 @@ The React Foundation tracks contributions to 54 React ecosystem libraries via Gi
 
 No manual submission - all tracked via GitHub API!
 
-## Tracked Libraries (54 Total)
+## Tracked Libraries (55 Total)
 
 ### Routing & Frameworks
 - **react-router** - React Router
@@ -28,6 +28,7 @@ No manual submission - all tracked via GitHub API!
 - **remix-run/remix** - Remix
 - **vercel/next.js** - Next.js
 - **gatsbyjs/gatsby** - Gatsby
+- **facebook/docusaurus** - Docusaurus
 - **molefrog/wouter** - Wouter
 
 ### State Management

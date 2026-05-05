@@ -1,6 +1,6 @@
 # React Ecosystem Libraries Tracking
 
-This document outlines the 54 React ecosystem libraries tracked for contributor recognition and tier progression in the React Foundation Store.
+This document outlines the 55 React ecosystem libraries tracked for contributor recognition and tier progression in the React Foundation Store.
 
 ## Overview
 
@@ -31,7 +31,7 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 | **Sustainer Access** | 120 | Sustained engagement across multiple libraries (~15 merged PRs) |
 | **Core Ally Access** | 250 | Top-tier maintainers who are pillars of the ecosystem (~30+ merged PRs) |
 
-## Tracked Libraries (54 Total)
+## Tracked Libraries (55 Total)
 
 ### Core React & React Native (9 repositories)
 **Tier 1 (Critical Infrastructure):**
@@ -90,7 +90,7 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 
 ---
 
-### Meta-frameworks (5 repositories)
+### Meta-frameworks (6 repositories)
 **Tier 1 (Production-Grade Frameworks):**
 - `vercel/next.js` - The React framework for production
 - `remix-run/remix` - Full-stack web framework
@@ -98,6 +98,7 @@ With 54 tracked libraries, tier thresholds have been calibrated to recognize mea
 
 **Tier 2:**
 - `gatsbyjs/gatsby` - Static site generator
+- `facebook/docusaurus` - Documentation-focused React meta-framework
 - `withastro/astro` - Modern static site builder with React support
 
 ---

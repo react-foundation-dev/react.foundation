@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MaintainerProgress } from "@/features/maintainer-progress/maintainer-progress";
 import { MaintainerProgressProvider } from "@/features/maintainer-progress/context";
 import { Pill } from "@/components/ui/pill";
+import { ecosystemLibraries } from "@/lib/maintainer-tiers";
 
 export const metadata: Metadata = {
   title: "Contributor Status",
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function ContributorStatusPage() {
+  const libraryCount = ecosystemLibraries.length;
+
   return (
     <div className="space-y-8 pt-12">
       <div>
@@ -18,7 +21,7 @@ export default function ContributorStatusPage() {
           <Pill tone="sky">PREVIEW</Pill>
         </div>
         <p className="mt-2 text-base text-foreground/70">
-          Your contributions across 54 React ecosystem libraries.
+          Your contributions across {libraryCount} React ecosystem libraries.
         </p>
       </div>
 

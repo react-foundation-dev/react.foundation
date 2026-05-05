@@ -1,5 +1,5 @@
 /**
- * Icon mapping for all 54 React ecosystem libraries
+ * Icon mapping for all 55 React ecosystem libraries
  * Uses Simple Icons via @icons-pack/react-simple-icons
  */
 
@@ -16,6 +16,7 @@ import {
   SiTailwindcss,
   SiGraphql,
   SiGatsby,
+  SiDocusaurus,
   SiRemix,
   SiExpo,
   SiZod,
@@ -76,6 +77,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   remix: SiRemix,
   expo: SiExpo,
   gatsby: SiGatsby,
+  docusaurus: SiDocusaurus,
   astro: SiAstro,
 
   // Forms & Validation
@@ -152,6 +154,7 @@ export const libraryDisplayNames: Record<string, string> = {
   remix: "Remix",
   expo: "Expo",
   gatsby: "Gatsby",
+  docusaurus: "Docusaurus",
   astro: "Astro",
   "react-hook-form": "React Hook Form",
   formik: "Formik",
