@@ -71,10 +71,7 @@ export function CommunityModal({ community }: CommunityModalProps) {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
-                <h2
-                  id="community-modal-title"
-                  className="text-3xl md:text-4xl font-bold text-foreground"
-                >
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                   {community.name}
                 </h2>
                 {community.verified && (
