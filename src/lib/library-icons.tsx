@@ -16,6 +16,7 @@ import {
   SiTailwindcss,
   SiGraphql,
   SiGatsby,
+  SiDocusaurus,
   SiRemix,
   SiExpo,
   SiZod,
@@ -76,7 +77,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   remix: SiRemix,
   expo: SiExpo,
   gatsby: SiGatsby,
-  docusaurus: null,
+  docusaurus: SiDocusaurus,
   astro: SiAstro,
 
   // Forms & Validation
