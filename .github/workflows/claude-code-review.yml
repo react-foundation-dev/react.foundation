@@ -17,6 +17,9 @@ jobs:
     #   github.event.pull_request.user.login == 'external-contributor' ||
     #   github.event.pull_request.user.login == 'new-developer' ||
     #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # Fork PRs do not receive OIDC token env vars/secrets in this workflow context,
+    # so skip Claude review there instead of failing every external contribution.
+    if: ${{ !github.event.pull_request.head.repo.fork }}
 
     runs-on: ubuntu-latest
     permissions:
