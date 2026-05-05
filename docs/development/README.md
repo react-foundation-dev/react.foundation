@@ -42,7 +42,7 @@ curl http://localhost:3000/api/ris/status
 ```
 
 ### [📚 Ecosystem Libraries](./ecosystem-libraries.md)
-Complete list of 54 React ecosystem libraries tracked for RIS:
+Complete list of 55 React ecosystem libraries tracked for RIS:
 - Core libraries (React, React DOM)
 - Routing (React Router, TanStack Router)
 - State management (Redux, Zustand, Jotai)

@@ -26,6 +26,7 @@ export const PROBE_REPOS: ProbeRepo[] = [
   { owner: 'vercel', repo: 'next.js', stars: 125000, category: 'framework', description: 'Next.js framework' },
   { owner: 'remix-run', repo: 'remix', stars: 29000, category: 'framework', description: 'Remix framework' },
   { owner: 'gatsbyjs', repo: 'gatsby', stars: 55000, category: 'framework', description: 'Gatsby framework' },
+  { owner: 'facebook', repo: 'docusaurus', stars: 59000, category: 'framework', description: 'Docusaurus documentation framework' },
   { owner: 'expo', repo: 'expo', stars: 32000, category: 'framework', description: 'Expo React Native' },
 
   // UI Component Libraries

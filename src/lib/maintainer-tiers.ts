@@ -80,11 +80,12 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "TanStack", name: "router", category: "routing", tier: 2 },
   { owner: "molefrog", name: "wouter", category: "routing", tier: 3 },
 
-  // Meta-frameworks (5 repos)
+  // Meta-frameworks (6 repos)
   { owner: "vercel", name: "next.js", category: "framework", tier: 1 },
   { owner: "remix-run", name: "remix", category: "framework", tier: 1 },
   { owner: "expo", name: "expo", category: "framework", tier: 1 },
   { owner: "gatsbyjs", name: "gatsby", category: "framework", tier: 2 },
+  { owner: "facebook", name: "docusaurus", category: "framework", tier: 2 },
   { owner: "withastro", name: "astro", category: "framework", tier: 2 },
 
   // Forms & Validation (5 repos)

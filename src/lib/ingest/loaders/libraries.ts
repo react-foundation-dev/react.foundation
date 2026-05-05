@@ -4,8 +4,6 @@
  * Based on AUTO_INGESTION_SETUP.md specification
  */
 
-import { readFile } from 'fs/promises';
-import { join } from 'path';
 import type { ContentLoader, RawRecord } from '../types';
 import { logger } from '@/lib/logger';
 
@@ -55,11 +53,12 @@ export class LibrariesLoader implements ContentLoader {
     { repo: 'TanStack/router', name: 'TanStack Router', category: 'Routing', tier: 'Tier 2' },
     { repo: 'molefrog/wouter', name: 'Wouter', category: 'Routing', tier: 'Tier 3' },
 
-    // Meta-frameworks (5 repositories)
+    // Meta-frameworks (6 repositories)
     { repo: 'vercel/next.js', name: 'Next.js', category: 'Meta-frameworks', tier: 'Tier 1' },
     { repo: 'remix-run/remix', name: 'Remix', category: 'Meta-frameworks', tier: 'Tier 1' },
     { repo: 'expo/expo', name: 'Expo', category: 'Meta-frameworks', tier: 'Tier 1' },
     { repo: 'gatsbyjs/gatsby', name: 'Gatsby', category: 'Meta-frameworks', tier: 'Tier 2' },
+    { repo: 'facebook/docusaurus', name: 'Docusaurus', category: 'Meta-frameworks', tier: 'Tier 2' },
     { repo: 'withastro/astro', name: 'Astro', category: 'Meta-frameworks', tier: 'Tier 2' },
 
     // Forms & Validation (5 repositories)
