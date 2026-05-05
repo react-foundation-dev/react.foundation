@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import type { Community } from '@/types/community';
 import type * as Leaflet from 'leaflet';
 import useSWR from 'swr';
@@ -355,13 +356,8 @@ export function CommunityMap() {
                   </div>
 
                   <div className="flex gap-2">
-                    <a
+                    <Link
                       href={`/communities/${community.slug}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.history.pushState({}, '', `/communities/${community.slug}`);
-                        window.dispatchEvent(new PopStateEvent('popstate'));
-                      }}
                       className="flex-1 text-center rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:opacity-90 cursor-pointer"
                       style={{
                         backgroundColor: 'hsl(var(--primary))',
@@ -369,7 +365,7 @@ export function CommunityMap() {
                       }}
                     >
                       View Details
-                    </a>
+                    </Link>
                     {community.meetup_url && (
                       <a
                         href={community.meetup_url}

@@ -53,6 +53,7 @@ export function CommunityModal({ community }: CommunityModalProps) {
       onClick={() => router.back()}
     >
       <div
+        role="dialog"
         className="bg-card border-2 border-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >

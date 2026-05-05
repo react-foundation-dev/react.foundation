@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "test:e2e": "playwright test",
     "shopify:location": "node scripts/get-shopify-location.mjs",
     "shopify:seed": "node scripts/seed-shopify-v2.mjs",
     "shopify:seed:dry-run": "node scripts/seed-shopify-v2.mjs --dry-run",
@@ -86,6 +87,7 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.59.1",
     "@storybook/addon-a11y": "^10.0.0",
     "@storybook/addon-docs": "^10.0.0",
     "@storybook/addon-onboarding": "^10.0.0",
