@@ -2,7 +2,7 @@ name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, synchronize, ready_for_review, reopened, labeled, unlabeled]
     # Optional: Only run on specific file changes
     # paths:
     #   - "src/**/*.ts"
@@ -11,6 +11,25 @@ on:
     #   - "src/**/*.jsx"
 
 jobs:
+  merge-eligibility:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Block merge when PR is labeled do-not-merge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = (context.payload.pull_request.labels || []).map(label => label.name)
+            const blockedLabel = 'status:do-not-merge'
+            const isBlocked = labels.includes(blockedLabel)
+
+            core.info(`labels=${labels.join(', ')}`)
+
+            if (isBlocked) {
+              core.setFailed(`PR is not eligible for merge while it has the ${blockedLabel} label.`)
+            }
+
   claude-review-skip-check:
     runs-on: ubuntu-latest
     permissions:
