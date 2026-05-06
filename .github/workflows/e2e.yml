@@ -1,0 +1,39 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --user 1001
+    env:
+      REDIS_URL: redis://redis:6379
+      NEXTAUTH_SECRET: ci-placeholder-secret
+      GITHUB_CLIENT_ID: ci-placeholder-id
+      GITHUB_CLIENT_SECRET: ci-placeholder-secret
+    services:
+      redis:
+        image: redis:alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 10
+          --health-start-period 1s
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Seed Redis
+        run: npm run seed:communities
+      - name: Run Playwright tests
+        run: npm run test:e2e
