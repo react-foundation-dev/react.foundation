@@ -36,4 +36,4 @@ jobs:
       - name: Seed Redis
         run: npm run seed:communities
       - name: Run Playwright tests
-        run: npm run test:e2e -- --reporter=list
+        run: npm run test:e2e
