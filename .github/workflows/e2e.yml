@@ -19,12 +19,13 @@ jobs:
       GITHUB_CLIENT_SECRET: ci-placeholder-secret
     services:
       redis:
-        image: redis
+        image: redis:alpine
         options: >-
           --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 10
+          --health-start-period 1s
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -35,4 +36,4 @@ jobs:
       - name: Seed Redis
         run: npm run seed:communities
       - name: Run Playwright tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- --reporter=list
