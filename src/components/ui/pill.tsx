@@ -30,7 +30,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-2 text-xs uppercase tracking-[0.15em] text-muted-foreground backdrop-blur sm:gap-3 sm:px-4 sm:tracking-[0.3em]",
+        "inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-muted px-3 py-2 text-xs uppercase tracking-[0.15em] text-muted-foreground backdrop-blur sm:gap-3 sm:px-4 sm:tracking-[0.3em]",
         className,
       )}
     >
@@ -38,7 +38,7 @@ export function Pill({
         className={cn("h-2 w-2 shrink-0 rounded-full", dotClass)}
         aria-hidden="true"
       />
-      <span className="whitespace-nowrap">{children}</span>
+      <span className="truncate">{children}</span>
     </span>
   );
 }
