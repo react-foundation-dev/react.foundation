@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { RFDS } from "@/components/rfds";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { ThemeToggleWrapper } from "@/components/ui/theme-toggle-wrapper";
@@ -150,12 +151,9 @@ export function Header() {
               className="transition hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20"
             />
           ) : (
-            <Link
-              href="/api/auth/signin"
-              className="rounded-full border border-border bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-primary/90"
-            >
+            <RFDS.ButtonLink href="/api/auth/signin" size="sm">
               Sign in
-            </Link>
+            </RFDS.ButtonLink>
           )}
         </div>
 
