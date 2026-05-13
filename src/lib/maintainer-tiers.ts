@@ -129,6 +129,7 @@ export const ecosystemLibraries: RepoTarget[] = [
   { owner: "styled-components", name: "styled-components", category: "styling", tier: 1 },
   { owner: "emotion-js", name: "emotion", category: "styling", tier: 1 },
   { owner: "tailwindlabs", name: "tailwindcss", category: "styling", tier: 1 },
+  { owner: "facebook", name: "stylex", category: "styling", tier: 2 },
   { owner: "marklawlor", name: "nativewind", category: "styling", tier: 2 },
 ];
 

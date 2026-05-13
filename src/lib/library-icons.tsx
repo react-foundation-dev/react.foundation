@@ -1,5 +1,5 @@
 /**
- * Icon mapping for all 55 React ecosystem libraries
+ * Icon mapping for all 56 React ecosystem libraries
  * Uses Simple Icons via @icons-pack/react-simple-icons
  */
 
@@ -121,6 +121,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   "styled-components": SiStyledcomponents,
   emotion: null,
   tailwindcss: SiTailwindcss,
+  stylex: null,
   nativewind: SiTailwindcss, // Use Tailwind logo for NativeWind
 };
 
@@ -184,6 +185,7 @@ export const libraryDisplayNames: Record<string, string> = {
   "styled-components": "Styled Components",
   emotion: "Emotion",
   tailwindcss: "Tailwind CSS",
+  stylex: "StyleX",
   nativewind: "NativeWind",
 };
 

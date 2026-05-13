@@ -60,4 +60,30 @@ describe('ecosystemLibraries', () => {
       })
     );
   });
+
+  it('includes StyleX in related library datasets', async () => {
+    expect(findLibrary('facebook', 'stylex')).toMatchObject({
+      category: 'styling',
+      tier: 2,
+    });
+    expect(NPMCollector.getPackageName('facebook', 'stylex')).toBe('@stylexjs/stylex');
+    expect(libraryDisplayNames.stylex).toBe('StyleX');
+
+    expect(PROBE_REPOS).toContainEqual(
+      expect.objectContaining({
+        owner: 'facebook',
+        repo: 'stylex',
+        category: 'ui-library',
+      })
+    );
+
+    const loader = new LibrariesLoader();
+    const records = await loader.load();
+    expect(records).toContainEqual(
+      expect.objectContaining({
+        id: 'library-facebook-stylex',
+        title: 'StyleX',
+      })
+    );
+  });
 });

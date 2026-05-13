@@ -97,9 +97,10 @@ export class LibrariesLoader implements ContentLoader {
     // Data Tables (1 repository)
     { repo: 'TanStack/table', name: 'TanStack Table', category: 'Data Tables', tier: 'Tier 1' },
 
-    // Styling (2 repositories)
+    // Styling (3 repositories)
     { repo: 'styled-components/styled-components', name: 'styled-components', category: 'Styling', tier: 'Tier 1' },
     { repo: 'emotion-js/emotion', name: 'Emotion', category: 'Styling', tier: 'Tier 1' },
+    { repo: 'facebook/stylex', name: 'StyleX', category: 'Styling', tier: 'Tier 2' },
   ];
 
   async load(): Promise<RawRecord[]> {
