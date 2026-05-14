@@ -36,6 +36,7 @@ export const PROBE_REPOS: ProbeRepo[] = [
   { owner: 'radix-ui', repo: 'primitives', stars: 16000, category: 'ui-library', description: 'Radix Primitives' },
   { owner: 'adobe', repo: 'react-spectrum', stars: 13000, category: 'ui-library', description: 'React Spectrum' },
   { owner: 'tailwindlabs', repo: 'headlessui', stars: 26000, category: 'ui-library', description: 'Headless UI' },
+  { owner: 'facebook', repo: 'stylex', stars: 8000, category: 'ui-library', description: 'StyleX styling system' },
   { owner: 'ariakit', repo: 'ariakit', stars: 8000, category: 'ui-library', description: 'Ariakit' },
   { owner: 'mantine-dev', repo: 'mantine', stars: 27000, category: 'ui-library', description: 'Mantine' },
   { owner: 'palantir', repo: 'blueprint', stars: 21000, category: 'ui-library', description: 'Blueprint' },

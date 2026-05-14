@@ -1,6 +1,8 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { libraryDisplayNames } from './library-icons';
+import { LibraryIcon, libraryDisplayNames } from './library-icons';
 import { ecosystemLibraries } from './maintainer-tiers';
 import { LibrariesLoader } from './ingest/loaders/libraries';
 import { NPMCollector } from './ris/collectors/npm-collector';
@@ -57,6 +59,37 @@ describe('ecosystemLibraries', () => {
       expect.objectContaining({
         id: 'library-facebook-docusaurus',
         title: 'Docusaurus',
+      })
+    );
+  });
+
+  it('includes StyleX in related library datasets', async () => {
+    expect(findLibrary('facebook', 'stylex')).toMatchObject({
+      category: 'styling',
+      tier: 2,
+    });
+    expect(NPMCollector.getPackageName('facebook', 'stylex')).toBe('@stylexjs/stylex');
+    expect(libraryDisplayNames.stylex).toBe('StyleX');
+
+    const stylexIconMarkup = renderToStaticMarkup(
+      createElement(LibraryIcon, { libraryName: 'stylex', size: 24 })
+    );
+    expect(stylexIconMarkup).toContain('/assets/library-icons/stylex.svg');
+
+    expect(PROBE_REPOS).toContainEqual(
+      expect.objectContaining({
+        owner: 'facebook',
+        repo: 'stylex',
+        category: 'ui-library',
+      })
+    );
+
+    const loader = new LibrariesLoader();
+    const records = await loader.load();
+    expect(records).toContainEqual(
+      expect.objectContaining({
+        id: 'library-facebook-stylex',
+        title: 'StyleX',
       })
     );
   });

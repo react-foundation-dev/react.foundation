@@ -177,6 +177,7 @@ export class NPMCollector {
       'facebook/hermes': null, // JavaScript engine (C++ binary, not on NPM)
       'facebook/metro': 'metro',
       'facebook/react-devtools': 'react-devtools',
+      'facebook/stylex': '@stylexjs/stylex',
       'reactjs/react.dev': null, // Documentation website (not a library)
       'reactjs/rfcs': null, // RFC repository (not a library)
       'reduxjs/redux': 'redux',
