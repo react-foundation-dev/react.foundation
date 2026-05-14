@@ -125,7 +125,7 @@ export const ecosystemLibraries: RepoTarget[] = [
   // Data Tables (1 repo)
   { owner: "TanStack", name: "table", category: "tables", tier: 1 },
 
-  // Styling (4 repos)
+  // Styling (5 repos)
   { owner: "styled-components", name: "styled-components", category: "styling", tier: 1 },
   { owner: "emotion-js", name: "emotion", category: "styling", tier: 1 },
   { owner: "tailwindlabs", name: "tailwindcss", category: "styling", tier: 1 },
