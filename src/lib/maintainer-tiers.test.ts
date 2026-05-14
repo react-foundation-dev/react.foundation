@@ -1,6 +1,8 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { libraryDisplayNames } from './library-icons';
+import { LibraryIcon, libraryDisplayNames } from './library-icons';
 import { ecosystemLibraries } from './maintainer-tiers';
 import { LibrariesLoader } from './ingest/loaders/libraries';
 import { NPMCollector } from './ris/collectors/npm-collector';
@@ -68,6 +70,11 @@ describe('ecosystemLibraries', () => {
     });
     expect(NPMCollector.getPackageName('facebook', 'stylex')).toBe('@stylexjs/stylex');
     expect(libraryDisplayNames.stylex).toBe('StyleX');
+
+    const stylexIconMarkup = renderToStaticMarkup(
+      createElement(LibraryIcon, { libraryName: 'stylex', size: 24 })
+    );
+    expect(stylexIconMarkup).toContain('/assets/library-icons/stylex.svg');
 
     expect(PROBE_REPOS).toContainEqual(
       expect.objectContaining({

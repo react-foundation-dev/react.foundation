@@ -3,6 +3,7 @@
  * Uses Simple Icons via @icons-pack/react-simple-icons
  */
 
+import Image from "next/image";
 import {
   SiReact,
   SiRedux,
@@ -37,6 +38,18 @@ import {
 
 // Simple Icons doesn't have all libraries, so we'll use fallback for missing ones
 type IconComponent = React.ComponentType<{ size?: number; color?: string; className?: string }>;
+
+function StylexIcon({ size = 20, className }: { size?: number; color?: string; className?: string }) {
+  return (
+    <Image
+      src="/assets/library-icons/stylex.svg"
+      alt="StyleX logo"
+      width={size}
+      height={size}
+      className={className}
+    />
+  );
+}
 
 // Icon mapping by library repo name
 export const libraryIcons: Record<string, IconComponent | null> = {
@@ -121,7 +134,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   "styled-components": SiStyledcomponents,
   emotion: null,
   tailwindcss: SiTailwindcss,
-  stylex: null,
+  stylex: StylexIcon,
   nativewind: SiTailwindcss, // Use Tailwind logo for NativeWind
 };
 
