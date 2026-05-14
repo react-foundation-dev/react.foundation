@@ -48,11 +48,12 @@ export type ContributionStats = {
 };
 
 export const ecosystemLibraries: RepoTarget[] = [
-  // Core React (9 repos)
+  // Core React (10 repos)
   { owner: "facebook", name: "react", category: "core", tier: 1 }, // Includes React Compiler (in /compiler subdirectory)
   { owner: "facebook", name: "relay", category: "data", tier: 1 },
   { owner: "facebook", name: "jest", category: "testing", tier: 1 },
   { owner: "facebook", name: "react-native", category: "core", tier: 1 },
+  { owner: "facebook", name: "react-strict-dom", category: "core", tier: 2 },
   { owner: "facebook", name: "hermes", category: "core", tier: 1, hasNpmPackage: false }, // JavaScript engine (C++ binary, not on NPM)
   { owner: "reactjs", name: "react.dev", category: "core", tier: 1, hasNpmPackage: false }, // Documentation website (not a library)
   { owner: "reactjs", name: "rfcs", category: "core", tier: 1, hasNpmPackage: false }, // RFC repository (not a library)

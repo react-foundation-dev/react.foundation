@@ -22,9 +22,10 @@ export class LibrariesLoader implements ContentLoader {
   name = 'LibrariesLoader';
 
   private libraries: LibraryData[] = [
-    // Core React & React Native (9 repositories)
+    // Core React & React Native (10 repositories)
     { repo: 'facebook/react', name: 'React', category: 'Core React', tier: 'Tier 1' },
     { repo: 'facebook/react-native', name: 'React Native', category: 'Core React', tier: 'Tier 1' },
+    { repo: 'facebook/react-strict-dom', name: 'React Strict DOM', category: 'Core React', tier: 'Tier 2' },
     { repo: 'facebook/hermes', name: 'Hermes', category: 'Core React', tier: 'Tier 1' },
     { repo: 'reactjs/react.dev', name: 'React Documentation', category: 'Core React', tier: 'Tier 1' },
     { repo: 'reactjs/rfcs', name: 'React RFCs', category: 'Core React', tier: 'Tier 1' },
