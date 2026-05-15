@@ -15,7 +15,11 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
     meetup_url: '', website: '', member_count: '', organizer_name: '', organizer_email: ''
   });
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{success: boolean; message: string} | null>(null);
+  const [result, setResult] = useState<{
+    success: boolean;
+    message: string;
+    confirmationId?: string;
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,13 +33,23 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
       });
       const data = await res.json();
       if (data.success) {
-        setResult({ success: true, message: 'Community submitted!' });
-        setTimeout(() => { onSuccess?.() || (fullPage && router.push('/communities')); }, 2000);
+        setResult({
+          success: true,
+          message: 'Community submitted!',
+          confirmationId: data.submissionId,
+        });
+        setTimeout(() => {
+          if (onSuccess) {
+            onSuccess();
+          } else if (fullPage) {
+            router.push('/communities');
+          }
+        }, 2000);
       } else {
         setResult({ success: false, message: data.error || 'Failed' });
       }
-    } catch (err: any) {
-      setResult({ success: false, message: err.message });
+    } catch (err: unknown) {
+      setResult({ success: false, message: err instanceof Error ? err.message : 'Submission failed' });
     } finally {
       setSubmitting(false);
     }
@@ -72,7 +86,7 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
       <CountrySelect label="Country" required value={formData.country} onChange={(country) => setFormData({...formData, country})} placeholder="Select your country first" />
       <div><label className="block text-sm font-medium mb-2">Full Address <span className="text-destructive">*</span></label>
         <RFDS.Input required value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} placeholder={getAddressPlaceholder()} className="w-full" />
-        <p className="text-xs text-muted-foreground mt-1">Include venue name, street, city - we'll use this to place your pin on the map</p>
+        <p className="text-xs text-muted-foreground mt-1">Include venue name, street, city - we&apos;ll use this to place your pin on the map</p>
       </div>
       <div><label className="block text-sm font-medium mb-2">City <span className="text-destructive">*</span></label>
         <RFDS.Input required value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} placeholder={formData.country === 'United States' ? 'San Francisco' : 'Amsterdam'} className="w-full" />
@@ -96,9 +110,18 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
           <RFDS.Input required type="email" value={formData.organizer_email} onChange={(e) => setFormData({...formData, organizer_email: e.target.value})} className="w-full" />
         </div>
       </div>
-      {result && <div className={`p-4 rounded-lg border ${result.success ? 'bg-green-500/10 border-green-500/20' : 'bg-destructive/10 border-destructive/20'}`}>
-        <p className={`text-sm font-medium ${result.success ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}>{result.message}</p>
-      </div>}
+      {result && (
+        <div className={`p-4 rounded-lg border ${result.success ? 'bg-success/10 border-success/20' : 'bg-destructive/10 border-destructive/20'}`}>
+          <p className={`text-sm font-medium ${result.success ? 'text-success' : 'text-destructive'}`}>{result.message}</p>
+          {result.success && result.confirmationId && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Confirmation ID: <code className="rounded bg-muted px-1 py-0.5 font-mono text-foreground">{result.confirmationId}</code>
+              <br />
+              Save this ID if you need to follow up on your submission.
+            </p>
+          )}
+        </div>
+      )}
       <RFDS.SemanticButton type="submit" variant="primary" disabled={submitting} className="w-full">
         {submitting ? 'Submitting...' : 'Submit Community'}
       </RFDS.SemanticButton>

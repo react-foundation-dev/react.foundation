@@ -68,6 +68,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: 'Community submitted successfully. We will review and add it soon!',
+      submissionId: submission.id,
     });
 
   } catch (error: unknown) {
