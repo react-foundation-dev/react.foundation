@@ -28,6 +28,7 @@ export const PROBE_REPOS: ProbeRepo[] = [
   { owner: 'gatsbyjs', repo: 'gatsby', stars: 55000, category: 'framework', description: 'Gatsby framework' },
   { owner: 'facebook', repo: 'docusaurus', stars: 59000, category: 'framework', description: 'Docusaurus documentation framework' },
   { owner: 'expo', repo: 'expo', stars: 32000, category: 'framework', description: 'Expo React Native' },
+  { owner: 'facebook', repo: 'react-strict-dom', stars: 3506, category: 'ui-library', description: 'React Strict DOM cross-platform component system' },
 
   // UI Component Libraries
   { owner: 'mui', repo: 'material-ui', stars: 93000, category: 'ui-library', description: 'Material UI' },

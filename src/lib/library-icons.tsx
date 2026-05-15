@@ -56,6 +56,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
   // Core React
   react: SiReact,
   "react-native": SiReact,
+  "react-strict-dom": SiReact,
   jest: SiJest,
   relay: SiGraphql,
   hermes: SiReact, // Hermes is from Meta/Facebook
@@ -142,6 +143,7 @@ export const libraryIcons: Record<string, IconComponent | null> = {
 export const libraryDisplayNames: Record<string, string> = {
   react: "React",
   "react-native": "React Native",
+  "react-strict-dom": "React Strict DOM",
   jest: "Jest",
   relay: "Relay",
   hermes: "Hermes",

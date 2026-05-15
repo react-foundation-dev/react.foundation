@@ -93,4 +93,30 @@ describe('ecosystemLibraries', () => {
       })
     );
   });
+
+  it('includes React Strict DOM in related library datasets', async () => {
+    expect(findLibrary('facebook', 'react-strict-dom')).toMatchObject({
+      category: 'core',
+      tier: 2,
+    });
+    expect(NPMCollector.getPackageName('facebook', 'react-strict-dom')).toBe('react-strict-dom');
+    expect(libraryDisplayNames['react-strict-dom']).toBe('React Strict DOM');
+
+    expect(PROBE_REPOS).toContainEqual(
+      expect.objectContaining({
+        owner: 'facebook',
+        repo: 'react-strict-dom',
+        category: 'ui-library',
+      })
+    );
+
+    const loader = new LibrariesLoader();
+    const records = await loader.load();
+    expect(records).toContainEqual(
+      expect.objectContaining({
+        id: 'library-facebook-react-strict-dom',
+        title: 'React Strict DOM',
+      })
+    );
+  });
 });

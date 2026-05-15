@@ -172,6 +172,7 @@ export class NPMCollector {
     const specialCases: Record<string, string | null> = {
       'facebook/react': 'react',
       'facebook/react-native': 'react-native',
+      'facebook/react-strict-dom': 'react-strict-dom',
       'facebook/jest': 'jest',
       'facebook/relay': 'react-relay',
       'facebook/hermes': null, // JavaScript engine (C++ binary, not on NPM)
