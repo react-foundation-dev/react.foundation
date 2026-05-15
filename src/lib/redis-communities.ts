@@ -398,36 +398,41 @@ export async function getCommunitiesPaginated(
 
 /**
  * Force re-seed (for admin use)
- * Clears existing data and re-seeds with new format
+ * Replaces matching seeded IDs while preserving runtime-added communities.
  */
 export async function forceSeed(communities: Community[]): Promise<void> {
   try {
     const redis = await getRedis();
     if (!redis) throw new Error('Redis not available');
 
-    console.log('🗑️ Clearing existing communities...');
+    console.log('🔄 Re-seeding source communities while preserving runtime additions...');
 
-    // Get all existing IDs and delete them
+    const incomingIds = new Set(communities.map((community) => community.id));
     const existingIds = await redis.smembers(COMMUNITIES_INDEX_KEY);
-    if (existingIds.length > 0) {
-      const pipeline = redis.pipeline();
-      for (const id of existingIds) {
-        pipeline.del(getCommunityKey(id));
-      }
-      pipeline.del(COMMUNITIES_INDEX_KEY);
-      await pipeline.exec();
+    const preservedIds = existingIds.filter((id) => !incomingIds.has(id));
+
+    const pipeline = redis.pipeline();
+
+    for (const community of communities) {
+      pipeline.set(getCommunityKey(community.id), JSON.stringify(community));
     }
 
-    // Clear old format if it exists
-    await redis.del('communities:all');
+    if (incomingIds.size > 0) {
+      pipeline.sadd(COMMUNITIES_INDEX_KEY, ...incomingIds);
+    }
 
-    // Clear seeded flag
-    await redis.del(SEEDED_FLAG_KEY);
+    if (preservedIds.length > 0) {
+      pipeline.sadd(COMMUNITIES_INDEX_KEY, ...preservedIds);
+    }
 
-    // Re-seed with new format
-    await seedCommunities(communities);
+    pipeline.del('communities:all');
+    pipeline.set(SEEDED_FLAG_KEY, 'true');
 
-    console.log('✅ Force re-seed completed');
+    await pipeline.exec();
+
+    console.log(
+      `✅ Force re-seed completed (${communities.length} source communities, ${preservedIds.length} runtime preserved)`
+    );
   } catch (error) {
     console.error('❌ Force re-seed failed:', error);
     throw error;
