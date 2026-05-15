@@ -15,7 +15,7 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
     meetup_url: '', website: '', member_count: '', organizer_name: '', organizer_email: ''
   });
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{success: boolean; message: string} | null>(null);
+  const [result, setResult] = useState<{success: boolean; message: string; confirmationId?: string} | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,13 +29,13 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
       });
       const data = await res.json();
       if (data.success) {
-        setResult({ success: true, message: 'Community submitted!' });
+        setResult({ success: true, message: 'Community submitted!', confirmationId: data.submissionId });
         setTimeout(() => { onSuccess?.() || (fullPage && router.push('/communities')); }, 2000);
       } else {
         setResult({ success: false, message: data.error || 'Failed' });
       }
-    } catch (err: any) {
-      setResult({ success: false, message: err.message });
+    } catch (err: unknown) {
+      setResult({ success: false, message: err instanceof Error ? err.message : 'Submission failed' });
     } finally {
       setSubmitting(false);
     }
@@ -96,9 +96,18 @@ export function AddCommunityForm({ fullPage, onSuccess }: Props = {}) {
           <RFDS.Input required type="email" value={formData.organizer_email} onChange={(e) => setFormData({...formData, organizer_email: e.target.value})} className="w-full" />
         </div>
       </div>
-      {result && <div className={`p-4 rounded-lg border ${result.success ? 'bg-green-500/10 border-green-500/20' : 'bg-destructive/10 border-destructive/20'}`}>
-        <p className={`text-sm font-medium ${result.success ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}>{result.message}</p>
-      </div>}
+      {result && (
+        <div className={`p-4 rounded-lg border ${result.success ? 'bg-success/10 border-success/20' : 'bg-destructive/10 border-destructive/20'}`}>
+          <p className={`text-sm font-medium ${result.success ? 'text-success' : 'text-destructive'}`}>{result.message}</p>
+          {result.success && result.confirmationId && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Confirmation ID: <code className="font-mono bg-muted px-1 py-0.5 rounded text-foreground">{result.confirmationId}</code>
+              <br />
+              Save this ID if you need to follow up on your submission.
+            </p>
+          )}
+        </div>
+      )}
       <RFDS.SemanticButton type="submit" variant="primary" disabled={submitting} className="w-full">
         {submitting ? 'Submitting...' : 'Submit Community'}
       </RFDS.SemanticButton>
