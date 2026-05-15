@@ -398,36 +398,65 @@ export async function getCommunitiesPaginated(
 
 /**
  * Force re-seed (for admin use)
- * Clears existing data and re-seeds with new format
+ * Replaces matching seeded IDs while preserving runtime-added communities.
  */
 export async function forceSeed(communities: Community[]): Promise<void> {
   try {
     const redis = await getRedis();
     if (!redis) throw new Error('Redis not available');
 
-    console.log('🗑️ Clearing existing communities...');
+    console.log('🔄 Re-seeding source communities while preserving runtime additions...');
 
-    // Get all existing IDs and delete them
+    const incomingIds = new Set(communities.map((community) => community.id));
     const existingIds = await redis.smembers(COMMUNITIES_INDEX_KEY);
-    if (existingIds.length > 0) {
-      const pipeline = redis.pipeline();
-      for (const id of existingIds) {
-        pipeline.del(getCommunityKey(id));
-      }
-      pipeline.del(COMMUNITIES_INDEX_KEY);
-      await pipeline.exec();
+
+    const staleIds = existingIds.filter((id) => !incomingIds.has(id));
+    const staleCommunities = await Promise.all(
+      staleIds.map(async (id) => {
+        const raw = await redis.get(getCommunityKey(id));
+        return raw ? { id, community: JSON.parse(raw) as Community } : null;
+      })
+    );
+
+    const preservedIds = staleCommunities
+      .filter(
+        (entry): entry is { id: string; community: Community } =>
+          entry !== null && Boolean(entry.community.approved_by || entry.community.approved_at)
+      )
+      .map((entry) => entry.id);
+
+    const removableIds = staleIds.filter((id) => !preservedIds.includes(id));
+
+    const pipeline = redis.pipeline();
+
+    for (const community of communities) {
+      pipeline.set(getCommunityKey(community.id), JSON.stringify(community));
     }
 
-    // Clear old format if it exists
-    await redis.del('communities:all');
+    for (const id of removableIds) {
+      pipeline.del(getCommunityKey(id));
+    }
 
-    // Clear seeded flag
-    await redis.del(SEEDED_FLAG_KEY);
+    if (removableIds.length > 0) {
+      pipeline.del(COMMUNITIES_INDEX_KEY);
+    }
 
-    // Re-seed with new format
-    await seedCommunities(communities);
+    if (incomingIds.size > 0) {
+      pipeline.sadd(COMMUNITIES_INDEX_KEY, ...incomingIds);
+    }
 
-    console.log('✅ Force re-seed completed');
+    if (preservedIds.length > 0) {
+      pipeline.sadd(COMMUNITIES_INDEX_KEY, ...preservedIds);
+    }
+
+    pipeline.del('communities:all');
+    pipeline.set(SEEDED_FLAG_KEY, 'true');
+
+    await pipeline.exec();
+
+    console.log(
+      `✅ Force re-seed completed (${communities.length} source communities, ${preservedIds.length} runtime preserved, ${removableIds.length} stale removed)`
+    );
   } catch (error) {
     console.error('❌ Force re-seed failed:', error);
     throw error;
