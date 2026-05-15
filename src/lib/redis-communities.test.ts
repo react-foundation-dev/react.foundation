@@ -147,6 +147,34 @@ describe('forceSeed', () => {
     }));
   });
 
+  it('removes seeded communities that are no longer present in the incoming source data', async () => {
+    const staleSeeded = baseCommunity({
+      id: 'community-stale-seeded',
+      name: 'Stale Seed Name',
+      slug: 'stale-seed-name',
+      description: 'Should be removed on reset',
+    });
+
+    await redis.set(`communities:${staleSeeded.id}`, JSON.stringify(staleSeeded));
+    await redis.sadd('communities:index', staleSeeded.id);
+    await redis.set('communities:seeded', 'true');
+
+    const incomingSeed = baseCommunity({
+      id: 'community-fresh-seeded',
+      name: 'Fresh Seed Name',
+      slug: 'fresh-seed-name',
+    });
+
+    const { forceSeed, getCommunityById, getCommunities } = await import('./redis-communities');
+
+    await forceSeed([incomingSeed]);
+
+    await expect(getCommunityById('community-stale-seeded')).resolves.toBeNull();
+    await expect(getCommunities()).resolves.toEqual([
+      expect.objectContaining({ id: 'community-fresh-seeded' }),
+    ]);
+  });
+
   it('updates seeded communities when the incoming seed data has the same id', async () => {
     const existingSeeded = baseCommunity({
       id: 'community-seeded',

@@ -409,12 +409,36 @@ export async function forceSeed(communities: Community[]): Promise<void> {
 
     const incomingIds = new Set(communities.map((community) => community.id));
     const existingIds = await redis.smembers(COMMUNITIES_INDEX_KEY);
-    const preservedIds = existingIds.filter((id) => !incomingIds.has(id));
+
+    const staleIds = existingIds.filter((id) => !incomingIds.has(id));
+    const staleCommunities = await Promise.all(
+      staleIds.map(async (id) => {
+        const raw = await redis.get(getCommunityKey(id));
+        return raw ? { id, community: JSON.parse(raw) as Community } : null;
+      })
+    );
+
+    const preservedIds = staleCommunities
+      .filter(
+        (entry): entry is { id: string; community: Community } =>
+          entry !== null && Boolean(entry.community.approved_by || entry.community.approved_at)
+      )
+      .map((entry) => entry.id);
+
+    const removableIds = staleIds.filter((id) => !preservedIds.includes(id));
 
     const pipeline = redis.pipeline();
 
     for (const community of communities) {
       pipeline.set(getCommunityKey(community.id), JSON.stringify(community));
+    }
+
+    for (const id of removableIds) {
+      pipeline.del(getCommunityKey(id));
+    }
+
+    if (removableIds.length > 0) {
+      pipeline.del(COMMUNITIES_INDEX_KEY);
     }
 
     if (incomingIds.size > 0) {
@@ -431,7 +455,7 @@ export async function forceSeed(communities: Community[]): Promise<void> {
     await pipeline.exec();
 
     console.log(
-      `✅ Force re-seed completed (${communities.length} source communities, ${preservedIds.length} runtime preserved)`
+      `✅ Force re-seed completed (${communities.length} source communities, ${preservedIds.length} runtime preserved, ${removableIds.length} stale removed)`
     );
   } catch (error) {
     console.error('❌ Force re-seed failed:', error);
