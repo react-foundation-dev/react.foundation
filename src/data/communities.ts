@@ -1,6 +1,6 @@
 /**
  * React Communities - Single Source of Truth
- * 65 communities with corrected meetup URLs
+ * 66 communities with corrected meetup URLs
  * Last updated: 2025-10-24T20:22:31.823Z
  */
 
@@ -2516,6 +2516,41 @@ export const REACT_COMMUNITIES: Community[] = [
     "created_at": "2025-10-24T15:05:17.672Z",
     "updated_at": "2025-10-24T15:05:17.672Z",
     "meetup_url": "reactdenver.com"
+  },
+  {
+    "id": "react-michigan",
+    "name": "React Michigan",
+    "slug": "react-michigan",
+    "city": "Grand Rapids",
+    "region": "Michigan",
+    "country": "United States",
+    "timezone": "America/Detroit",
+    "coordinates": {
+      "lat": 42.9634,
+      "lng": -85.6681
+    },
+    "organizers": [
+      {
+        "id": "xue",
+        "name": "Xue",
+        "role": "Lead Organizer"
+      }
+    ],
+    "founded_date": "2026-05-08",
+    "event_types": [
+      "meetup"
+    ],
+    "description": "Michigan-based React community getting started in Grand Rapids, with fuller public description and links forthcoming.",
+    "member_count": 0,
+    "typical_attendance": 0,
+    "meeting_frequency": "irregular",
+    "primary_language": "English",
+    "status": "new",
+    "invite_only": false,
+    "verified": true,
+    "verification_status": "verified",
+    "created_at": "2026-05-15T20:22:40.000Z",
+    "updated_at": "2026-05-15T20:22:40.000Z"
   }
 ];
 
