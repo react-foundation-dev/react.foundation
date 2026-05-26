@@ -69,6 +69,7 @@ describe('sitemap', () => {
         '/privacy',
         '/scoring',
         '/store',
+        '/store/collections',
         '/store/collections/foundation-drop',
         '/store/products/react-cap',
         '/terms',

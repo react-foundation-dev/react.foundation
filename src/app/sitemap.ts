@@ -39,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     buildEntry(baseUrl, '/privacy', 'yearly', 0.4),
     buildEntry(baseUrl, '/terms', 'yearly', 0.4),
     buildEntry(baseUrl, '/store', 'daily', 0.9),
+    buildEntry(baseUrl, '/store/collections', 'weekly', 0.8),
     buildEntry(baseUrl, '/communities', 'weekly', 0.9),
     buildEntry(baseUrl, '/communities/start', 'monthly', 0.9),
     buildEntry(baseUrl, '/communities/add', 'monthly', 0.7),
