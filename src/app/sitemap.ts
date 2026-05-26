@@ -4,88 +4,91 @@
  */
 
 import { MetadataRoute } from 'next';
-import { getAllCollections } from '@/lib/shopify';
+
+import { REACT_COMMUNITIES } from '@/data/communities';
+import { getAllAuthors } from '@/lib/authors';
+import { getAllCollections, getAllProducts } from '@/lib/shopify';
+import { getAllUpdates } from '@/lib/updates';
+
+const buildEntry = (
+  baseUrl: string,
+  path: string,
+  changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'],
+  priority: number,
+  lastModified: Date = new Date(),
+): MetadataRoute.Sitemap[number] => ({
+  url: path ? `${baseUrl}${path}` : baseUrl,
+  lastModified,
+  changeFrequency,
+  priority,
+});
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://react.foundation';
 
-  // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/impact`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    // Store
-    {
-      url: `${baseUrl}/store`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    // Communities
-    {
-      url: `${baseUrl}/communities`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/communities/start`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/communities/add`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    // Educators
-    {
-      url: `${baseUrl}/educators`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/educators/apply`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    buildEntry(baseUrl, '', 'daily', 1.0),
+    buildEntry(baseUrl, '/about', 'monthly', 0.8),
+    buildEntry(baseUrl, '/about/board-of-directors', 'monthly', 0.7),
+    buildEntry(baseUrl, '/about/technical-steering-committee', 'monthly', 0.7),
+    buildEntry(baseUrl, '/impact', 'weekly', 0.9),
+    buildEntry(baseUrl, '/authors', 'weekly', 0.8),
+    buildEntry(baseUrl, '/updates', 'weekly', 0.8),
+    buildEntry(baseUrl, '/libraries', 'weekly', 0.8),
+    buildEntry(baseUrl, '/scoring', 'weekly', 0.8),
+    buildEntry(baseUrl, '/privacy', 'yearly', 0.4),
+    buildEntry(baseUrl, '/terms', 'yearly', 0.4),
+    buildEntry(baseUrl, '/store', 'daily', 0.9),
+    buildEntry(baseUrl, '/communities', 'weekly', 0.9),
+    buildEntry(baseUrl, '/communities/start', 'monthly', 0.9),
+    buildEntry(baseUrl, '/communities/add', 'monthly', 0.7),
   ];
 
-  // Dynamic collection pages
+  const communityRoutes: MetadataRoute.Sitemap = REACT_COMMUNITIES.map((community) =>
+    buildEntry(
+      baseUrl,
+      `/communities/${community.slug}`,
+      'weekly',
+      0.7,
+      community.updated_at ? new Date(community.updated_at) : new Date(),
+    ),
+  );
+
+  const authorRoutes: MetadataRoute.Sitemap = getAllAuthors().map((author) =>
+    buildEntry(baseUrl, `/authors/${author.slug}`, 'monthly', 0.6),
+  );
+
+  const updateRoutes: MetadataRoute.Sitemap = getAllUpdates().map((update) =>
+    buildEntry(baseUrl, `/updates/${update.slug}`, 'monthly', 0.7, new Date(update.metadata.date)),
+  );
+
   let collectionRoutes: MetadataRoute.Sitemap = [];
+  let productRoutes: MetadataRoute.Sitemap = [];
+
   try {
     const collections = await getAllCollections();
-    collectionRoutes = collections.map((collection: { handle: string; updatedAt?: string }) => ({
-      url: `${baseUrl}/store/collections/${collection.handle}`,
-      lastModified: new Date(collection.updatedAt || Date.now()),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }));
+    collectionRoutes = collections.map((collection) =>
+      buildEntry(baseUrl, `/store/collections/${collection.handle}`, 'weekly', 0.8),
+    );
   } catch (error) {
     console.error('Error fetching collections for sitemap:', error);
   }
 
-  // Dynamic product pages would go here if we had a getProducts function
-  // For now, products are discovered via collections
+  try {
+    const products = await getAllProducts();
+    productRoutes = products.map((product) =>
+      buildEntry(baseUrl, `/store/products/${product.handle}`, 'weekly', 0.7),
+    );
+  } catch (error) {
+    console.error('Error fetching products for sitemap:', error);
+  }
 
-  return [...staticRoutes, ...collectionRoutes];
+  return [
+    ...staticRoutes,
+    ...communityRoutes,
+    ...authorRoutes,
+    ...updateRoutes,
+    ...collectionRoutes,
+    ...productRoutes,
+  ];
 }
