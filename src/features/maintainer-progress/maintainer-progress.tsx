@@ -193,7 +193,7 @@ export function MaintainerProgress() {
                   reach <span className="text-foreground">{nextTier.label}</span>.
                 </p>
               ) : (
-                <p className="mt-2 text-xs text-emerald-300">
+                <p className="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
                   You’ve unlocked every tier of the Core Maintainer Essentials collection.
                 </p>
               )}
@@ -284,13 +284,13 @@ export function MaintainerProgress() {
                                   key={repo}
                                   className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all ${
                                     hasContributions
-                                      ? "bg-success/15 text-emerald-200 shadow-sm shadow-emerald-500/10"
+                                      ? "bg-success/15 text-emerald-700 shadow-sm shadow-emerald-500/10 dark:text-emerald-200"
                                       : "bg-background/[0.04] text-foreground/50 hover:bg-background/[0.06]"
                                   }`}
                                 >
                                   {repo}
                                   {hasContributions && (
-                                    <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-md bg-success/25 px-1.5 text-[11px] font-semibold tabular-nums text-emerald-100">
+                                    <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-md bg-success/25 px-1.5 text-[11px] font-semibold tabular-nums text-emerald-800 dark:text-emerald-100">
                                       {contributionCount}
                                     </span>
                                   )}
