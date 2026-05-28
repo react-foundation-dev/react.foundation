@@ -48,6 +48,9 @@ describe('sitemap', () => {
 
     const entries = await sitemap();
     const urls = entries.map((entry) => new URL(entry.url).pathname);
+    const collectionEntry = entries.find(
+      (entry) => new URL(entry.url).pathname === '/store/collections/foundation-drop',
+    );
 
     expect(urls).not.toContain('/educators');
     expect(urls).not.toContain('/educators/apply');
@@ -77,5 +80,7 @@ describe('sitemap', () => {
         '/updates/spring-update',
       ]),
     );
+
+    expect(collectionEntry?.lastModified).toEqual(new Date('2026-04-01T00:00:00.000Z'));
   });
 });

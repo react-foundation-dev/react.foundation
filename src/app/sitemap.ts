@@ -68,8 +68,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const collections = await getAllCollections();
-    collectionRoutes = collections.map((collection) =>
-      buildEntry(baseUrl, `/store/collections/${collection.handle}`, 'weekly', 0.8),
+    collectionRoutes = collections.map((collection: { handle: string; updatedAt?: string }) =>
+      buildEntry(
+        baseUrl,
+        `/store/collections/${collection.handle}`,
+        'weekly',
+        0.8,
+        collection.updatedAt ? new Date(collection.updatedAt) : new Date(),
+      ),
     );
   } catch (error) {
     console.error('Error fetching collections for sitemap:', error);
