@@ -439,6 +439,7 @@ export interface ShopifyCollection {
   title: string;
   description: string;
   descriptionHtml: string;
+  updatedAt: string;
   image: {
     url: string;
     altText: string | null;
@@ -529,6 +530,7 @@ export async function getAllCollections(limit = 50): Promise<ShopifyCollection[]
             title
             description
             descriptionHtml
+            updatedAt
             image {
               url
               altText
